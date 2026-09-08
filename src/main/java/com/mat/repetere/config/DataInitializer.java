@@ -1,54 +1,74 @@
-/*
 package com.mat.repetere.config;
 
-import com.repetere.model.Language;
-import com.repetere.model.User;
-import com.repetere.repository.LanguageRepository;
-import com.repetere.repository.UserRepository;
+import com.mat.repetere.model.*;
+import com.mat.repetere.repository.*;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.util.List;
+@Component
+public class DataInitializer implements CommandLineRunner {
 
-@Configuration
-public class DataInitializer {
+    private final UserRepository userRepository;
+    private final LanguageRepository languageRepository;
+    private final DeckRepository deckRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Bean
-    CommandLineRunner initDatabase(
-            LanguageRepository languageRepository,
-            UserRepository userRepository,
-            PasswordEncoder passwordEncoder) {
-        return args -> {
-            // 1. Cargar idiomas si la tabla está vacía
-            if (languageRepository.count() == 0) {
-                List<Language> languages = List.of(
-                        new Language("en-US", "Inglés", "en-US-AriaNeural"),
-                        new Language("es-ES", "Español", "es-ES-ElviraNeural"),
-                        new Language("zh-CN", "Chino Mandarín", "zh-CN-XiaoxiaoNeural"),
-                        new Language("ja-JP", "Japonés", "ja-JP-NanamiNeural"),
-                        new Language("fr-FR", "Francés", "fr-FR-DeniseNeural"),
-                        new Language("de-DE", "Alemán", "de-DE-KatjaNeural"),
-                        new Language("pt-BR", "Portugués (Brasil)", "pt-BR-FranciscaNeural"),
-                        new Language("it-IT", "Italiano", "it-IT-ElsaNeural")
-                );
-                languageRepository.saveAll(languages);
-            }
-
-            // 2. Crear usuario Admin inicial si no existe
-            if (!userRepository.existsByEmail("admin@repetere.com")) {
-                User admin = new User();
-                admin.setName("Admin Repetere");
-                admin.setEmail("admin@repetere.com");
-                admin.setPassword(passwordEncoder.encode("admin123")); // Contraseña hasheada
-                admin.setNativeLanguage("ES");
-                admin.setAdmin(true);
-                admin.setCreatedAt(LocalDateTime.now());
-
-                userRepository.save(admin);
-            }
-        };
+    public DataInitializer(UserRepository userRepository,
+                           LanguageRepository languageRepository,
+                           DeckRepository deckRepository,
+                           PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.languageRepository = languageRepository;
+        this.deckRepository = deckRepository;
+        this.passwordEncoder = passwordEncoder;
     }
-* */
+
+    @Override
+    public void run(String... args) throws Exception {
+        // cargar idiomas si noe xisten
+        if (languageRepository.count() == 0) {
+            Language english = new Language();
+            english.setCode("en-US");
+            english.setName("Inglés");
+            english.setTtsVoice("en-US-AriaNeural");
+
+            Language spanish = new Language();
+            spanish.setCode("es-ES");
+            spanish.setName("Español");
+            spanish.setTtsVoice("es-ES-ElviraNeural");
+
+            languageRepository.save(english);
+            languageRepository.save(spanish);
+            System.out.println("-> Idiomas de prueba cargados.");
+        }
+
+        // cargar admin si no hay usuarios
+        if (userRepository.count() == 0) {
+            User admin = new User();
+            admin.setName("Admin Repetere");
+            admin.setEmail("admin@repetere.com");
+            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setNativeLanguage(NativeLanguage.ES);
+            admin.setRole(Role.ADMIN);
+            admin.setActive(true);
+            admin.setForcePasswordChange(false);
+
+            userRepository.save(admin);
+            System.out.println("-> Usuario Admin creado (admin@repetere.com / admin123).");
+
+            // cargar mazo de prueba
+            Language langEn = languageRepository.findByCode("en-US").orElseThrow();
+            Language langEs = languageRepository.findByCode("es-ES").orElseThrow();
+
+            Deck testDeck = new Deck();
+            testDeck.setUser(admin);
+            testDeck.setName("Inglés - Frases Frecuentes");
+            testDeck.setLangFrom(langEn);
+            testDeck.setLangTo(langEs);
+
+            deckRepository.save(testDeck);
+            System.out.println("-> Mazo de prueba creado.");
+        }
+    }
+}

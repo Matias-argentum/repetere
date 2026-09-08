@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido a Repetere</title>
+    <link rel="stylesheet" th:href="@{/css/water.css}">
+</head>
+<body>
+    <main>
+        <header>
+            <h1>Bienvenido a Repetere</h1>
+            <p>Repetición espaciada para el aprendizaje eficiente de idiomas.</p>
+        </header>
+
+        <section>
+            <h2>¿Para qué srive?</h2>
+            <ul>
+                <li><strong>Repaso:</strong> Algoritmo que se llama SM-2 para repetir y retener.</li>
+                <li><strong>Soporte Multilingüe:</strong> Audio TTS integrado (espero poder integrarlo).</li>
+                <li><strong>Control:</strong> Gestión personalizada de mazos y tarjetas.</li>
+            </ul>
+        </section>
+
+        <section>
+            <p>Para empezar a repasar tus mazos, inicia sesión:</p>
+            <a th:href="@{/login}"><button>Iniciar Sesión</button></a>
+        </section>
+    </main>
+</body>
+</html>

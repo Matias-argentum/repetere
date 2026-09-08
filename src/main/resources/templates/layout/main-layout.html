@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content, title)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:replace="${title}">Repetere</title>
+    <link rel="stylesheet" th:href="@{/css/water.css}" href="../../static/css/water.css">
+</head>
+<body>
+    <header>
+        <h1>Repetere</h1>
+        <nav>
+            <a th:href="@{/decks}">Mis Mazos</a> |
+            <a th:href="@{/decks/new}">Nuevo Mazo</a> |
+            <a th:href="@{/stats}">Estadísticas</a> |
+            <a th:href="@{/logout}">Cerrar Sesión</a>
+        </nav>
+        <hr>
+    </header>
+
+    <main th:insert="${content}">
+        <!-- El contenido específico de cada página se inyecta acá -->
+    </main>
+
+    <footer>
+        <hr>
+        <p><small>Repetere &copy; - Spaced Repetition System</small></p>
+    </footer>
+</body>
+</html>
