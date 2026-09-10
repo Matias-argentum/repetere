@@ -1,30 +1,43 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content, title)">
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(content, title)" color-mode="user">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:replace="${title}">Repetere</title>
-    <link rel="stylesheet" th:href="@{/css/water.css}" href="../../static/css/water.css">
+    <link rel="stylesheet" th:href="@{/css/mvp.css}" href="../../static/css/mvp.css">
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
 </head>
-<body>
-    <header>
-        <h1>Repetere</h1>
-        <nav>
-            <a th:href="@{/decks}">Mis Mazos</a> |
-            <a th:href="@{/decks/new}">Nuevo Mazo</a> |
-            <a th:href="@{/stats}">Estadísticas</a> |
-            <a th:href="@{/logout}">Cerrar Sesión</a>
-        </nav>
-        <hr>
-    </header>
+<body hx-boost="true" hx-target="#content" hx-swap="innerHTML" hx-push-url="true">
 
-    <main th:insert="${content}">
-        <!-- El contenido específico de cada página se inyecta acá -->
-    </main>
+<header>
+    <nav>
+        <h2>Repetere</h2>
+        <ul>
+            <li><a th:href="@{/decks}">Mis Mazos</a></li>
+            <li><a th:href="@{/decks/new}">Nuevo Mazo</a></li>
+            <li><a th:href="@{/stats}">Estadísticas</a></li>
+            <li>
+            <li>
+                <form th:action="@{/logout}" method="post" hx-boost="false" style="display: inline; margin: 0;">
+                    <button type="submit" style="all: unset; cursor: pointer; color: inherit; font: inherit;">
+                        Cerrar Sesión
+                    </button>
+                </form>
+            </li>
+            </li>
+        </ul>
+    </nav>
+    <hr>
+</header>
 
-    <footer>
-        <hr>
-        <p><small>Repetere &copy; - Spaced Repetition System</small></p>
-    </footer>
+<main id="content" th:insert="${content}">
+    <!-- El contenido específico de cada página se inyecta acá -->
+</main>
+
+<footer>
+    <hr>
+    <p><small>Repetere &copy; - Mi app de tarjetitas</small></p>
+</footer>
+
 </body>
 </html>
