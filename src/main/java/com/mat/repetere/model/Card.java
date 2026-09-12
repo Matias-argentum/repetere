@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "cards")
@@ -49,7 +50,7 @@ public class Card {
     private int intervalDays = 0;
 
     @Column(name = "ease_factor")
-    private float easeFactor = 2.5f;
+    private double easeFactor = 2.5;
 
     private int repetitions = 0;
 
@@ -58,6 +59,13 @@ public class Card {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    // en Card
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ReviewLog> reviewLogs;
+
+    @Column(name = "card_state")
+    private CardState cardState;
 
 
 }
