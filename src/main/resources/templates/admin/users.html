@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:fragment="page" th:replace="~{layout/main-layout :: layout(~{::content}, ~{::title})}">
+        <title>Users - Repetere</title>
+    </th:block>
+</head>
+<body>
+<div th:fragment="content">
+    <h1>Users</h1>
+    <br>
+    <div>
+        <table>
+            <thead>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>EMAIL</th>
+                <th>N-LANG</th>
+                <th>ROLE</th>
+                <th>ACTIVE</th>
+                <th>FORCE-CH</th>
+            </thead>
+            <tbody>
+            <tr th:each="user : ${users}">
+                <td th:text="${user.id}">1</td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.email}"></td>
+                <td th:text="${user.nativeLanguage}"></td>
+                <td th:text="${user.role}"></td>
+                <td th:text="${user.active}"></td>
+                <td th:text="${user.forcePasswordChange}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

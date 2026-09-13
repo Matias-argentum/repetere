@@ -43,6 +43,20 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("-> Idiomas de prueba cargados.");
         }
 
+        if (userRepository.count() == 1){
+            User user = new User();
+            user.setName("user");
+            user.setEmail("user@repetere.com");
+            user.setPassword(passwordEncoder.encode("user123"));
+            user.setNativeLanguage(NativeLanguage.ES);
+            user.setRole(Role.ADMIN);
+            user.setActive(true);
+            user.setForcePasswordChange(false);
+
+            userRepository.save(user);
+            System.out.println("-> Usuario user creado (user@repetere.com / user123).");
+        }
+
         // cargar admin si no hay usuarios
         if (userRepository.count() == 0) {
             User admin = new User();
@@ -50,7 +64,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setEmail("admin@repetere.com");
             admin.setPassword(passwordEncoder.encode("admin123"));
             admin.setNativeLanguage(NativeLanguage.ES);
-            admin.setRole(Role.ADMIN);
+            admin.setRole(Role.USER);
             admin.setActive(true);
             admin.setForcePasswordChange(false);
 
