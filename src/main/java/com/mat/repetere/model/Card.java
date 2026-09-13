@@ -65,7 +65,7 @@ public class Card {
     private List<ReviewLog> reviewLogs;
 
     @Column(name = "card_state")
-    private CardState cardState;
+    private CardState cardState = CardState.NEW;
 
 
 }
