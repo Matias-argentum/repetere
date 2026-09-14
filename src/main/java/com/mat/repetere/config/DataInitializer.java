@@ -49,7 +49,7 @@ public class DataInitializer implements CommandLineRunner {
             user.setEmail("user@repetere.com");
             user.setPassword(passwordEncoder.encode("user123"));
             user.setNativeLanguage(NativeLanguage.ES);
-            user.setRole(Role.ADMIN);
+            user.setRole(Role.USER);
             user.setActive(true);
             user.setForcePasswordChange(false);
 
@@ -64,7 +64,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setEmail("admin@repetere.com");
             admin.setPassword(passwordEncoder.encode("admin123"));
             admin.setNativeLanguage(NativeLanguage.ES);
-            admin.setRole(Role.USER);
+            admin.setRole(Role.ADMIN);
             admin.setActive(true);
             admin.setForcePasswordChange(false);
 

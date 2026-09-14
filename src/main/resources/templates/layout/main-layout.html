@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml" th:fragment="layout(content, title)"
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" th:fragment="layout(content, title)"
       color-mode="user">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title th:replace="${title}">Repetere</title>
     <link rel="stylesheet" th:href="@{/css/mvp.css}" href="../../static/css/mvp.css">
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
@@ -19,13 +21,11 @@
             <li><a th:href="@{/decks/new}">Nuevo Mazo</a></li>
             <li><a th:href="@{/stats}">Estadísticas</a></li>
             <li>
-            <li>
                 <form th:action="@{/logout}" method="post" hx-boost="false" style="display: inline; margin: 0;">
                     <button type="submit" style="all: unset; cursor: pointer; color: inherit; font: inherit;">
                         Cerrar Sesión
                     </button>
                 </form>
-            </li>
             </li>
         </ul>
     </nav>
@@ -40,6 +40,20 @@
     <hr>
     <p><small>Repetere &copy; - Mi app de tarjetitas</small></p>
 </footer>
+<script>
+    document.body.addEventListener('htmx:configRequest', function(evt) {
+         // 1. lee el token y el nombre de los meta tags
+        const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        const headerName = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
+        // 2. inyecta el token con su nombre
+        evt.detail.headers[headerName] = token;
+    });
+
+    document.body.addEventListener('closeModal', () => {
+        document.getElementById('dialog-modal').hidePopover();
+    });
+
+</script>
 </body>
 </html>

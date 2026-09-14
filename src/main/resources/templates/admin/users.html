@@ -6,11 +6,14 @@
     </th:block>
 </head>
 <body>
-<div th:fragment="content">
-    <h1>Users</h1>
+<div th:fragment="content" id="content">
+    <h3>Users</h3>
     <br>
-    <div>
-        <table>
+    <div th:fragment="users-table-div">
+        <div th:if="${successMessage}">
+            <p><code th:text="${successMessage}"></code></p>
+        </div>
+        <table  id="users-table">
             <thead>
                 <th>ID</th>
                 <th>NAME</th>
@@ -21,18 +24,50 @@
                 <th>FORCE-CH</th>
             </thead>
             <tbody>
-            <tr th:each="user : ${users}">
-                <td th:text="${user.id}">1</td>
-                <td th:text="${user.name}"></td>
-                <td th:text="${user.email}"></td>
-                <td th:text="${user.nativeLanguage}"></td>
-                <td th:text="${user.role}"></td>
-                <td th:text="${user.active}"></td>
-                <td th:text="${user.forcePasswordChange}"></td>
-            </tr>
+            <th:block th:each="user : ${users}">
+                <tr th:replace="~{admin/fragments/user-row :: userRow(${user})}"></tr>
+            </th:block>
             </tbody>
         </table>
     </div>
+    <br>
+    <section>
+        <button style="margin-top: 1rem" popovertarget="dialog-modal" id="openDialog">Crear nuevo usuario</button>
+
+        <div th:if="${successMessage}">
+            <p><mark th:text="${successMessage}"></mark></p>
+        </div>
+
+        <dialog popover="" id="dialog-modal">
+            <h3>Añadir usuario</h3>
+            <hr>
+            <form th:action="@{/admin/users}" method="post"
+                  hx-target="#users-table"
+                  hx-swap="outerHTML">
+
+                <label for="name">Nombre:</label>
+                <input type="text" id="name" name="name" size="28" placeholder="Nombre" required>
+
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="user@email.com" required>
+
+                <label for="role">Rol:</label>
+                <select id="role" name="role">
+                    <option value="ADMIN">Admin</option>
+                    <option value="USER">User</option>
+                </select>
+
+                <label for="nativeLanguage">Idioma Nativo:</label>
+                <select id="nativeLanguage" name="nativeLanguage">
+                    <option value="ES">Español</option>
+                    <option value="EN">Inglés</option>
+                </select>
+
+                <br>
+                <button type="submit">Guardar</button>
+            </form>
+        </dialog>
+    </section>
 </div>
 </body>
 </html>

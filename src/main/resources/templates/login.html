@@ -14,7 +14,7 @@
         <p>Iniciar Sesión</p>
     </header>
 
-    <!-- Mensajes de alerta automáticos de Spring Security -->
+    <!-- mensajes de alerta automáticos de Spring Security -->
     <div th:if="${param.error}">
         <p><mark>Usuario o contraseña incorrectos.</mark></p>
     </div>
@@ -22,7 +22,7 @@
         <p><small>Has cerrado sesión correctamente.</small></p>
     </div>
 
-    <!-- Formulario procesado por Spring Security -->
+    <!-- formulario para Spring Security -->
     <form th:action="@{/login}" method="post">
         <label for="username">Correo Electrónico:</label>
         <input type="email" id="username" name="username" required autofocus placeholder="tu@email.com">
