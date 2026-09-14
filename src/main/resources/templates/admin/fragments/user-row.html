@@ -1,0 +1,28 @@
+<table xmlns:th="http://www.thymeleaf.org">
+    <tbody>
+    <tr th:fragment="userRow(user)">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.email}"></td>
+        <td th:text="${user.nativeLanguage}"></td>
+        <td th:text="${user.role}"></td>
+        <td>
+           <button type="button"
+                   th:hx-patch="@{/admin/users/{id}/toggle-active(id=${user.id})}"
+                   th:text="${user.active} ? 'Deshabilitar' : 'Habilitar'"
+                   hx-target="closest tr"
+                   hx-swap="outerHTML"
+           ></button>
+        </td>
+        <td>
+            <button type="button"
+                    th:hx-patch="@{/admin/users/{id}/reset-password(id=${user.id})}"
+                    th:text="${!user.forcePasswordChange ? 'Forzar cambio' : 'Ya forzado'}"
+                    th:disabled="${user.forcePasswordChange}"
+                    hx-target="closest tr"
+                    hx-swap="outerHTML"
+            ></button>
+        </td>
+    </tr>
+    </tbody>
+</table>
