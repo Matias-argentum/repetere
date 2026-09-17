@@ -25,6 +25,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         customUser.setNativeLanguage(user.getNativeLanguage());
         customUser.setRole(user.getRole());
         customUser.setPassword(user.getPassword());
+        customUser.setActive(user.getActive());
         return customUser;
     }
 
