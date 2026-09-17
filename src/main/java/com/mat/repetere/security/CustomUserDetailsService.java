@@ -26,6 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         customUser.setRole(user.getRole());
         customUser.setPassword(user.getPassword());
         customUser.setActive(user.getActive());
+        customUser.setForcePasswordChange(user.getForcePasswordChange());
         return customUser;
     }
 

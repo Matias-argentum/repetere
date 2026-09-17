@@ -28,6 +28,7 @@ public class CustomUserDetails implements UserDetails {
     private Role role;
     private String password;
     private boolean active;
+    private boolean forcePasswordChange;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
