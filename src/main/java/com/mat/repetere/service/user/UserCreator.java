@@ -2,6 +2,7 @@ package com.mat.repetere.service.user;
 
 import com.mat.repetere.dto.user.UserRequestDto;
 import com.mat.repetere.dto.user.UserResponseDto;
+import com.mat.repetere.exception.EmailAlreadyExistsException;
 import com.mat.repetere.model.User;
 import com.mat.repetere.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,8 +24,13 @@ public class UserCreator {
 
     public UserResponseDto create(UserRequestDto request){
 
+        if(repository.findByEmail(request.email()).isPresent()){
+            throw new EmailAlreadyExistsException("Email ->" + request.email() + " no puede utilizarse.");
+        }
+
+        String username = request.name().replaceAll("\\s+", "");
         User user = new User();
-        user.setName(request.name());
+        user.setName(username);
         user.setEmail(request.email());
         user.setCreatedAt(LocalDateTime.now());
         user.setActive(true);

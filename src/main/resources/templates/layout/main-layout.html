@@ -17,6 +17,7 @@
         <h2>Repetere</h2>
         <ul>
             <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/users}">Usuarios</a></li>
+            <li><a th:href="@{/profile}">Perfil</a></li>
             <li><a th:href="@{/decks}">Mis Mazos</a></li>
             <li><a th:href="@{/decks/new}">Nuevo Mazo</a></li>
             <li><a th:href="@{/stats}">Estadísticas</a></li>
@@ -29,7 +30,6 @@
             </li>
         </ul>
     </nav>
-    <hr>
 </header>
 
 <main id="content" th:insert="${content}">

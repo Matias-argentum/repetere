@@ -4,6 +4,7 @@ import com.mat.repetere.model.NativeLanguage;
 import com.mat.repetere.model.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jspecify.annotations.Nullable;
@@ -17,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
+@Getter
 public class CustomUserDetails implements UserDetails {
 
     private Long id;
