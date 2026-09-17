@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:fragment="page" th:replace="~{layout/main-layout :: layout(~{::content}, ~{::title})}">
+        <title>Profile</title>
+    </th:block>
+</head>
+<body>
+<div th:fragment="content" id="content">
+    <h3>Mi Perfil</h3>
+    <section th:fragment="users-data-div">
+        <div th:if="${successMessage}">
+            <p><code th:text="${successMessage}"></code></p>
+        </div>
+        <aside  id="user-card">
+            <div style="display: flex; justify-content: space-between;">
+                <div style="width: 70%">
+                    <label>Nombre: </label>
+                    <p th:text="${user.name}"></p>
+                </div>
+                <div>
+                    <button popovertarget="dialog-modal-update-name" id="openDialog1" style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2;">Actualizar</button>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-around;">
+                <div style="width: 70%">
+                    <label>Email: </label>
+                    <p th:text="${user.email}"></p>
+                </div>
+                <div>
+                    <button popovertarget="dialog-modal-update-email" id="openDialog2" style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2;">Actualizar</button>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-around;">
+                <div style="width: 70%">
+                    <label>Password: </label>
+                    <p>*********</p>
+                </div>
+                <div>
+                    <button popovertarget="dialog-modal-update-password" id="openDialog3" style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2;">Actualizar</button>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-around;">
+                <div style="width: 70%">
+                    <label>Idioma nativo: </label>
+                    <p th:text="${user.nativeLanguage}"></p>
+                </div>
+                <div>
+                    <button disabled style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2;">Actualizar</button>
+                </div>
+
+            </div>
+        </aside>
+    </section>
+    <br>
+    <section>
+
+        <dialog popover="" id="dialog-modal-update-name">
+            <h3>Actualizar nombre</h3>
+            <hr>
+            <form th:action="@{/profile/update-name}"
+                  method="POST"
+                  hx-confirm="Se actualizara tu nombre de usuario y tendras que volver a iniciar sesión ¿seguro?">
+
+                <label for="name">Nuevo nombre:</label>
+                <input type="text" id="name" name="name" size="28" placeholder="Nombre" required>
+
+                <label for="password-name">Password:</label>
+                <input type="password" id="password-name" name="passwordName" size="28" placeholder="password" required>
+
+                <br>
+                <button type="submit">Actualizar</button>
+            </form>
+        </dialog>
+        <dialog popover="" id="dialog-modal-update-email">
+            <h3>Actualizar email</h3>
+            <form th:action="@{/profile/update-email}"
+                  method="POST"
+                  hx-confirm="Se actualizara tu email y tendras que volver a iniciar sesión ¿seguro?">
+
+                <label for="email">Nuevo email:</label>
+                <input type="text" id="email" name="email" size="28" placeholder="email" required>
+
+                <label for="password-email">Password:</label>
+                <input type="password" id="password-email" name="passwordEmail" size="28" placeholder="password" required>
+
+                <br>
+                <button type="submit">Actualizar</button>
+            </form>
+        </dialog>
+        <dialog popover="" id="dialog-modal-update-password">
+            <h3>Actualizar password</h3>
+            <form th:action="@{/profile/update-password}"
+                  method="POST"
+                  hx-confirm="Se actualizara tu password y tendras que volver a iniciar sesión ¿seguro?">
+
+                <label for="current-password">Password Actual:</label>
+                <input type="password" id="current-password" name="currentPassword" size="28" placeholder="password" required>
+
+                <label for="new-password">Password Nuevo:</label>
+                <input type="password" id="new-password" name="newPassword" size="28" placeholder="password" required>
+
+                <br>
+                <button type="submit">Actualizar</button>
+            </form>
+        </dialog>
+    </section>
+</div>
+</body>
+</html>
