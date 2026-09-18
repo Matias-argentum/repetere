@@ -8,6 +8,9 @@
 <body>
 <div th:fragment="content" id="content">
     <h3>Mi Perfil</h3>
+    <div th:if="${errorMessage}">
+        <p><code th:text="${errorMessage}"></code></p>
+    </div>
     <section th:fragment="users-data-div">
         <div th:if="${successMessage}">
             <p><code th:text="${successMessage}"></code></p>
@@ -77,7 +80,6 @@
             <form th:action="@{/profile/update-email}"
                   method="POST"
                   hx-confirm="Se actualizara tu email y tendras que volver a iniciar sesión ¿seguro?">
-
                 <label for="email">Nuevo email:</label>
                 <input type="text" id="email" name="email" size="28" placeholder="email" required>
 

@@ -13,25 +13,27 @@
         <h1>Repetere</h1>
         <p>Iniciar Sesión</p>
     </header>
-
-    <!-- mensajes de alerta automáticos de Spring Security -->
-    <div th:if="${param.error}">
-        <p><mark>Usuario o contraseña incorrectos.</mark></p>
-    </div>
-    <div th:if="${param.logout}">
-        <p><small>Has cerrado sesión correctamente.</small></p>
-    </div>
-
     <!-- formulario para Spring Security -->
-    <form th:action="@{/login}" method="post">
-        <label for="username">Correo Electrónico:</label>
-        <input type="email" id="username" name="username" required autofocus placeholder="tu@email.com">
+    <section>
+        <aside style="width: 350px">
+            <!-- mensajes de alerta automáticos de Spring Security -->
+            <div th:if="${param.error}">
+                <p><code>Usuario o contraseña incorrectos.</code></p>
+            </div>
+            <div th:if="${param.logout}">
+                <p><code>Has cerrado sesión correctamente.</code></p>
+            </div>
+            <form th:action="@{/login}" method="post">
+                <label for="username">Correo Electrónico:</label>
+                <input type="email" id="username" name="username" required autofocus placeholder="tu@email.com">
 
-        <label for="password">Contraseña:</label>
-        <input type="password" id="password" name="password" required>
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" required>
 
-        <button type="submit">Entrar</button>
-    </form>
+                <button type="submit">Entrar</button>
+            </form>
+        </aside>
+    </section>
 
     <footer>
         <p><a th:href="@{/}">&larr; Volver a la página principal</a></p>

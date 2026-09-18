@@ -2,6 +2,8 @@ package com.mat.repetere.controller.user;
 
 import com.mat.repetere.dto.user.UpdateNameRequestDto;
 import com.mat.repetere.dto.user.UserProfileResponseDto;
+import com.mat.repetere.exception.EmailAlreadyExistsException;
+import com.mat.repetere.exception.WrongPasswordException;
 import com.mat.repetere.security.CustomUserDetails;
 import com.mat.repetere.service.user.UserProfileUpdater;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,13 +27,23 @@ public class UpdateUserNameController {
     }
 
     @PostMapping("/update-name")
-    public void updateName(@AuthenticationPrincipal CustomUserDetails customUserDetails, @ModelAttribute UpdateNameRequestDto request, HttpServletRequest httpServletRequest, HttpServletResponse response){
+    public String updateName(@AuthenticationPrincipal CustomUserDetails loggedUser, Model  model,@ModelAttribute UpdateNameRequestDto request, HttpServletRequest httpServletRequest, HttpServletResponse response){
 
-        Long id = customUserDetails.getId();
-        UserProfileResponseDto updatedUser = userProfileUpdater.updateName(request, id);
-        httpServletRequest.getSession().invalidate();
+        Long id = loggedUser.getId();
 
-        response.setHeader("HX-Redirect", "/login");
+        try {
+            userProfileUpdater.updateName(request, id);
+            httpServletRequest.getSession().invalidate();
+
+            response.setHeader("HX-Redirect", "/login");
+        } catch (WrongPasswordException e) {
+            UserProfileResponseDto user = UserProfileResponseDto.toResponseFromPrincipal(loggedUser);
+
+            model.addAttribute("user", user);
+            model.addAttribute("errorMessage", "Password incorrecto, no se pudo actualizar nombre");
+            return "user/profile :: content";
+        }
+        return "profile/profile :: content";
 
     }
 }
