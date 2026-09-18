@@ -44,7 +44,9 @@
             <form th:action="@{/admin/users}" method="post"
                   hx-target="#users-table"
                   hx-swap="outerHTML">
-
+                <div th:if="${errorMessage}">
+                    <p><mark th:text="${errorMessage}"></mark></p>
+                </div>
                 <label for="name">Nombre:</label>
                 <input type="text" id="name" name="name" size="28" placeholder="Nombre" required>
 
