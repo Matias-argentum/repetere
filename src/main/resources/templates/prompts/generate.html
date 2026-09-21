@@ -43,9 +43,14 @@
     <br>
 
     <section id="prompt-result-section" th:fragment="promptResult">
-        <div th:if="${generatedPrompt}">
-            <h4>Tu prompt:</h4>
-            <textarea rows="15" style="width: 100%;" th:text="${generatedPrompt}"></textarea>
+        <div th:if="${generatedPrompt}" style="width: 100%">
+            <h4>Tu prompt (Copialo y pegalo en tu IA favorita):</h4>
+            <button type="button"
+                    style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2;"
+                    onclick="navigator.clipboard.writeText(document.getElementById('promptResultTextarea').value)">
+                Copiar
+            </button>
+            <textarea id="promptResultTextarea" readonly rows="15" style="width: 100%;" th:text="${generatedPrompt}"></textarea>
         </div>
     </section>
 

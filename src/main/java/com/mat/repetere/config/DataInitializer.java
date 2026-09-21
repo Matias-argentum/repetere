@@ -122,32 +122,33 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("-> Mazo de prueba creado.");
         }
 
-        if (promptTemplateRepository.count() == 1){
+        if (promptTemplateRepository.count() == 0){
             PromptTemplate template = new PromptTemplate();
             template.setActive(true);
             template.setNativeLanguage(NativeLanguage.ES);
             template.setText("""
-            Hola, quiero aprender el idioma: {targetLanguage}. Mi idioma nativo es: {nativeLanguage}. Mi nivel actual es: {level}.
-
-            Necesito un archivo en formato CSV donde cada línea represente una tarjeta para aprender mediante repetición espaciada, sobre el tema: {topic}.
-
-            Cada línea debe tener exactamente estos 5 campos, separados por punto y coma (;), en este orden exacto:
-            palabra_en_idioma_objetivo;pronunciacion_fonetica;traduccion_a_mi_idioma_nativo;frase_de_ejemplo_en_idioma_objetivo;traduccion_de_la_frase_a_mi_idioma_nativo
-
-            Reglas estrictas:
-            - Máximo 25 líneas.
-                    - Las frases de ejemplo no pueden superar los 140 caracteres cada una.
-                    - No agregues encabezado ni títulos, solo las líneas de datos.
-            - No agregues líneas en blanco entre los datos.
-                    - No agregues espacios antes o después de cada punto y coma.
-            - No uses comillas ni caracteres especiales que no sean los normales del idioma.
-            - Cada línea termina con un salto de línea simple, sin líneas vacías extra al final.
-            - El vocabulario y la complejidad de las frases deben ser apropiados para el nivel {nivel} según el Marco Común Europeo de Referencia (MCER/CEFR).
-
-                    Ejemplo de una línea válida:
-            hello;/heˈloʊ/;hola;hello my name is Juan;hola mi nombre es Juan
-            
-            Ten en cuenta además las siguientes aclaraciones: {clarifications}
+                    Hola, quiero aprender el idioma: {targetLanguage}. Mi idioma nativo es: {nativeLanguage}. Mi nivel actual es: {level}.
+                    
+                    Necesito un archivo en formato CSV donde cada línea represente una tarjeta para aprender mediante repetición espaciada, sobre el tema: {topic}.
+                    
+                    Cada línea debe tener exactamente estos 5 campos, separados por punto y coma (;), en este orden exacto:
+                    palabra_en_idioma_objetivo;pronunciacion_fonetica;traduccion_a_mi_idioma_nativo;frase_de_ejemplo_en_idioma_objetivo;traduccion_de_la_frase_a_mi_idioma_nativo
+                    
+                    Reglas estrictas:
+                    - Máximo 25 líneas.
+                            - Las frases de ejemplo no pueden superar los 140 caracteres cada una.
+                            - No agregues encabezado ni títulos, solo las líneas de datos.
+                    - No agregues líneas en blanco entre los datos.
+                            - No agregues espacios antes o después de cada punto y coma.
+                    - No uses comillas ni caracteres especiales que no sean los normales del idioma.
+                    - Cada línea termina con un salto de línea simple, sin líneas vacías extra al final.
+                    - El vocabulario y la complejidad de las frases deben ser apropiados para el nivel {level} según el Marco Común Europeo de Referencia (MCER/CEFR).
+                    - No incluyas ningún carácter invisible, marca de codificación (BOM), ni metadatos al inicio del archivo. La primera línea debe comenzar directamente con el primer campo de datos.
+                            Ejemplo de una línea válida:
+                    hello;/heˈloʊ/;hola;hello my name is Juan;hola mi nombre es Juan
+                    
+                    Ten en cuenta además las siguientes aclaraciones: {clarifications}
+                    
             """);
 
             promptTemplateRepository.save(template);
