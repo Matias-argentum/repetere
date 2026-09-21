@@ -17,9 +17,9 @@ public class PromptTemplate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "language_id", nullable = false)
-    private Language language;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "native_language", nullable = false)
+    private NativeLanguage nativeLanguage;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String text;

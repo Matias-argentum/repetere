@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:fragment="page" th:replace="~{layout/main-layout :: layout(~{::content}, ~{::title})}">
+        <title>Generar Prompt - Repetere</title>
+    </th:block>
+</head>
+<body>
+<div th:fragment="content" id="content">
+    <h3>Generar Prompt</h3>
+
+    <section id="prompt-form-section">
+        <form th:action="@{/prompts/generate}" method="post">
+
+            <label for="targetLanguageId">Idioma que quiero aprender:</label>
+            <select id="targetLanguageId" name="targetLanguageId" required>
+                <option th:each="language : ${languages}"
+                        th:value="${language.id}"
+                        th:text="${language.name}"></option>
+            </select>
+
+            <label for="level">Nivel actual:</label>
+            <select id="level" name="level" required>
+                <option value="A1">A1</option>
+                <option value="A2">A2</option>
+                <option value="B1">B1</option>
+                <option value="B2">B2</option>
+                <option value="C1">C1</option>
+                <option value="C2">C2</option>
+            </select>
+
+            <label for="topic">Tema:</label>
+            <input type="text" id="topic" name="topic" placeholder="Ej: viajes, comida, negocios" required>
+
+            <label for="clarifications">Aclaraciones (opcional):</label>
+            <textarea id="clarifications" name="clarifications" placeholder="Ej: quiero enfocarme en verbos en pasado"></textarea>
+
+            <br>
+            <button type="submit">Generar Prompt</button>
+        </form>
+    </section>
+
+    <br>
+
+    <section id="prompt-result-section" th:fragment="promptResult">
+        <div th:if="${generatedPrompt}">
+            <h4>Tu prompt:</h4>
+            <textarea rows="15" style="width: 100%;" th:text="${generatedPrompt}"></textarea>
+        </div>
+    </section>
+
+</div>
+</body>
+</html>
