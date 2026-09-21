@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:fragment="page" th:replace="~{layout/main-layout :: layout(~{::content}, ~{::title})}">
+        <title>Crear Nuevo Mazo - Repetere</title>
+    </th:block>
+</head>
+<body>
+<div th:fragment="content" id="content">
+    <h3>Crear Mazo</h3>
+
+    <section id="deck-form-section">
+        <form th:action="@{/decks/new}" method="post" enctype="multipart/form-data">
+
+            <label for="targetLanguageId">Idioma objetivo del mazo: </label>
+            <select id="targetLanguageId" name="targetLanguageId" required>
+                <option th:each="language : ${languages}"
+                        th:value="${language.id}"
+                        th:text="${language.name}"></option>
+            </select>
+
+            <label for="deck-name">Nombre del mazo:</label>
+            <input type="text" id="deck-name" name="deckName" placeholder="Vocabulario sobre cosas de la casa" required>
+
+            <label for="deck-csv">Archivo CSV:</label>
+            <input id="deck-csv" type="file" name="deckCsv" required accept="text/csv">
+
+            <br>
+            <button type="submit">Crear Mazo</button>
+        </form>
+    </section>
+
+    <br>
+</div>
+</body>
+</html>
