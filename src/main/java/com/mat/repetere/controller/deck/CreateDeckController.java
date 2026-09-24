@@ -5,10 +5,7 @@ import com.mat.repetere.dto.deck.DeckResponseDto;
 import com.mat.repetere.dto.deck.ParsedCsvLineDto;
 import com.mat.repetere.exception.MalformattedCsvFileException;
 import com.mat.repetere.security.CustomUserDetails;
-import com.mat.repetere.service.deck.DeckAudioProcessor;
-import com.mat.repetere.service.deck.DeckCreator;
-import com.mat.repetere.service.deck.DeckCsvParser;
-import com.mat.repetere.service.deck.DeckFinder;
+import com.mat.repetere.service.deck.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,13 +24,13 @@ public class CreateDeckController {
 
     private final DeckCsvParser deckCsvParser;
     private final DeckCreator deckCreator;
-    private final DeckFinder deckFinder;
+    private final DeckSearcher deckSearcher;
     private final DeckAudioProcessor deckAudioProcessor;
 
-    public CreateDeckController(DeckCsvParser deckCsvParser, DeckCreator deckCreator, DeckFinder deckFinder, DeckAudioProcessor deckAudioProcessor) {
+    public CreateDeckController(DeckCsvParser deckCsvParser, DeckCreator deckCreator, DeckSearcher deckSearcher, DeckAudioProcessor deckAudioProcessor) {
         this.deckCsvParser = deckCsvParser;
         this.deckCreator = deckCreator;
-        this.deckFinder = deckFinder;
+        this.deckSearcher = deckSearcher;
         this.deckAudioProcessor = deckAudioProcessor;
     }
 
@@ -45,7 +42,7 @@ public class CreateDeckController {
             List<ParsedCsvLineDto> parsedData = deckCsvParser.parse(deckCsv);
             DeckResponseDto createdDeck = deckCreator.create(request, parsedData, loggedUser.getId());
             deckAudioProcessor.generateAudios(createdDeck.id());
-            List<DeckResponseDto> decks = deckFinder.findAllByUserId(loggedUser.getId());
+            List<DeckResponseDto> decks = deckSearcher.findAllByUserId(loggedUser.getId());
             model.addAttribute("createdDeck", createdDeck);
             model.addAttribute("decks", decks);
             return "decks/deck-list :: content";

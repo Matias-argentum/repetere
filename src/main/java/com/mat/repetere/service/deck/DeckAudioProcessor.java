@@ -36,7 +36,7 @@ public class DeckAudioProcessor {
                 card.setWordAudioHash("en-US/hello.mp3");
                 card.setSentenceAudioHash("en-US/hello.mp3");
             }
-            Thread.sleep(50000);
+            Thread.sleep(10000);
             deck.setDeckStatus(DeckStatus.READY);
             cardRepository.saveAll(cardList);
             deckRepository.save(deck);
