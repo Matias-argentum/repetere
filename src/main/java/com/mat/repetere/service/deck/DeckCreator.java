@@ -48,7 +48,6 @@ public class DeckCreator {
         deck.setLangTo(targetLanguage);
 
         Deck savedDeck = deckRepository.save(deck);
-
         cardRepository.saveAll(parsedRows.stream().map( line -> ParsedCsvLineDto.fromDtoToCardEntity(line, savedDeck)).toList());
 
         return new DeckResponseDto(

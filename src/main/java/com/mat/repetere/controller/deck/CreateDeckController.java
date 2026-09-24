@@ -5,6 +5,7 @@ import com.mat.repetere.dto.deck.DeckResponseDto;
 import com.mat.repetere.dto.deck.ParsedCsvLineDto;
 import com.mat.repetere.exception.MalformattedCsvFileException;
 import com.mat.repetere.security.CustomUserDetails;
+import com.mat.repetere.service.deck.DeckAudioProcessor;
 import com.mat.repetere.service.deck.DeckCreator;
 import com.mat.repetere.service.deck.DeckCsvParser;
 import com.mat.repetere.service.deck.DeckFinder;
@@ -27,11 +28,13 @@ public class CreateDeckController {
     private final DeckCsvParser deckCsvParser;
     private final DeckCreator deckCreator;
     private final DeckFinder deckFinder;
+    private final DeckAudioProcessor deckAudioProcessor;
 
-    public CreateDeckController(DeckCsvParser deckCsvParser, DeckCreator deckCreator, DeckFinder deckFinder) {
+    public CreateDeckController(DeckCsvParser deckCsvParser, DeckCreator deckCreator, DeckFinder deckFinder, DeckAudioProcessor deckAudioProcessor) {
         this.deckCsvParser = deckCsvParser;
         this.deckCreator = deckCreator;
         this.deckFinder = deckFinder;
+        this.deckAudioProcessor = deckAudioProcessor;
     }
 
     @PostMapping
@@ -41,6 +44,7 @@ public class CreateDeckController {
         try{
             List<ParsedCsvLineDto> parsedData = deckCsvParser.parse(deckCsv);
             DeckResponseDto createdDeck = deckCreator.create(request, parsedData, loggedUser.getId());
+            deckAudioProcessor.generateAudios(createdDeck.id());
             List<DeckResponseDto> decks = deckFinder.findAllByUserId(loggedUser.getId());
             model.addAttribute("createdDeck", createdDeck);
             model.addAttribute("decks", decks);
