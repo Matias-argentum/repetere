@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:fragment="page" th:replace="~{layout/main-layout :: layout(~{::content}, ~{::title})}">
+        <title>Cards - Repetere</title>
+    </th:block>
+</head>
+<body>
+<div th:fragment="content" id="content">
+    <h3 th:text="${'Cards in deck -> '} + ${deckName}"></h3>
+    <br>
+    <div th:fragment="card-list-div">
+        <div th:if="${successMessage}">
+            <p><code th:text="${successMessage}"></code></p>
+        </div>
+        <section  id="card-list" style="display: flex;">
+            <th:block th:each="card : ${cards}">
+                <div th:replace="~{cards/fragments/card-card :: cardCard(${card})}"></div>
+            </th:block>
+        </section>
+        <br>
+    </div>
+</div>
+</body>
+</html>
