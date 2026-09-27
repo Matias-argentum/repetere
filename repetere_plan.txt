@@ -1,0 +1,65 @@
+Plan de Desarrollo (4 Semanas - 1 Hora/Día)
+
+Semana 1: Infraestructura y Modelado
+
+    Día 1: Crear docker-compose.yml local (MySQL 8 en utf8mb4 + MinIO).
+
+    Día 2: Configurar buckets en MinIO (anki-imports y anki-audios) y conexión desde Spring Boot.
+
+    Día 3: Implementar entidades User (con native_language) y PromptTemplate.
+
+    Día 4: Crear entidades Deck y Card (con campos para hash/URL de audios y atributos SM-2).
+
+    Día 5: Crear entidad ReviewLog y configurar borrado en cascada para Deck.
+
+    Día 6: Crear repositorios JPA con consultas clave (ej. tarjetas vencidas para la fecha actual).
+
+    Día 7: Probar carga de datos en UTF-8 y vincular la hoja de estilos mpv.css en la plantilla base.
+
+Semana 2: Prompts, Importación de CSV y Audios
+
+    Día 8: Crear Dashboard inicial para listar mazos del usuario.
+
+    Día 9: Implementar el generador de prompts dinámico según el tema e idioma del usuario.
+
+    Día 10: Implementar el servicio para leer y validar el archivo CSV.
+
+    Día 11: Integrar la generación de audios TTS y el cálculo de hashes para los archivos MP3.
+
+    Día 12: Guardar el CSV en anki-imports y subir los MP3 deduplicados a anki-audios.
+
+    Día 13: Implementar el flujo y la vista para la acción de "Borrar Mazo".
+
+    Día 14: Pruebas de importación de mazos completos en distintos idiomas.
+
+Semana 3: Pantalla de Repaso y Algoritmo SM-2
+
+    Día 15: Programar la lógica pura del algoritmo SM-2 en la capa de servicio.
+
+    Día 16: Diseñar la vista de estudio usando Thymeleaf y Water.css.
+
+    Día 17: Integrar botones de HTMX para "Mostrar Pista", "Voltear Card" y reproductores de audio <audio>.
+
+    Día 18: Crear los 5 botones de evaluación conectando HTMX con el backend.
+
+    Día 19: Configurar la respuesta de HTMX para actualizar las métricas de la tarjeta y devolver la siguiente sin recargar la página.
+
+    Día 20: Crear la vista de "Sesión completada por hoy".
+
+    Día 21: Pruebas de integración del ciclo de estudio y persistencia de calificaciones.
+
+Semana 4: Estadísticas, Polishing y Dockerización Local
+
+    Día 22: Implementar la vista de estadísticas (racha de días, palabras dominadas vs. en aprendizaje).
+
+    Día 23: Crear el Dockerfile optimizado para la aplicación Spring Boot.
+
+    Día 24: Integrar el servicio de Spring Boot en el docker-compose.yml local junto a MySQL y MinIO.
+
+    Día 25: Configurar PWA básica (manifest.json y Service Worker) para permitir la instalación en el navegador.
+
+    Día 26: Ajustar detalles de usabilidad y rendimiento visual con Water.css en móviles/tablets.
+
+    Día 27: Realizar pruebas de rendimiento de la pila completa corriendo 100% en contenedores Docker en tu equipo.
+
+    Día 28: Cargar un mazo real, realizar la primera sesión de estudio completa y dar por finalizado el MVP.

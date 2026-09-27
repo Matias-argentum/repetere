@@ -1,0 +1,80 @@
+PLAN COMPLETO - REPETERE
+(tiempos son estimados y flexibles, no rígidos, ajustalos a como te vaya)
+
+===================================
+YA HECHO
+Docker compose base (a confirmar si ya incluye MinIO)
+Entidades: User, Deck, Card, Language, NativeLanguage, PromptTemplate, ReviewLog, Role
+Repositorios JPA de todas las entidades
+Security: SecurityConfig, CustomUserDetails, CustomUserDetailsService
+DataInitializer
+Layout base con fragmentos (layout/main-layout.html)
+Patron content/page con deteccion de HX-Request en controllers
+Nav con htmx (hx-boost en body, navegacion sin recarga)
+Logout como form POST con CSRF, estilizado
+Dashboard con las tres tarjetas (Mazos, Generar Prompt, Estadisticas)
+Definido como mostrar nombre de usuario en nav (sec:authentication)
+Decidida arquitectura de TTS: container con edge-tts, invocado por ProcessBuilder
+Decidido que DeckStatus vive en la entidad Deck (PROCESSING, READY, FAILED)
+===================================
+BLOQUE A - Cerrar infraestructura pendiente
+Tiempo estimado: 2-4 horas repartidas
+Confirmar/agregar MinIO al docker-compose.yml si no esta
+Crear buckets (anki-imports, anki-audios) y probar conexion desde Spring Boot
+Agregar campo DeckStatus a la entidad Deck (enum PROCESSING, READY, FAILED)
+Revisar que Deck y Card tengan los campos necesarios para SM2 (easiness factor, intervalo, repeticiones, proxima fecha de repaso) y para audio (hash, url)
+Confirmar cascada de borrado configurada correctamente (borrar Deck borra sus Card y ReviewLog)
+Repositorios: agregar queries clave si faltan (tarjetas vencidas a la fecha actual, decks por usuario)
+===================================
+BLOQUE B - Roles y perfil de usuario
+Tiempo estimado: 4-6 horas repartidas
+Revisar Role.java y habilitar @EnableMethodSecurity
+Vista de admin: crear usuarios (no hay registro publico) e inhabilitar usuarios
+Vista "Mi perfil": cambiar password. Agregar entrada al nav
+LocaleResolver custom que lea el native_language del usuario logueado (no el header del navegador)
+Migrar textos ya escritos a messages.properties / messages_es.properties
+===================================
+BLOQUE C - Generador de prompts + Import de CSV (con TTS mockeado)
+Tiempo estimado: 8-12 horas repartidas
+Este es el bloque mas largo, es donde se arma el flujo central de la app
+Generador de prompt dinamico usando PromptTemplate (segun idioma y tema)
+Vista para crear deck: nombre + subida de CSV
+Servicio que parsea y valida el CSV, crea el Deck en PROCESSING y las Card asociadas
+Job asincrono (@Async o @Scheduled) que simula el TTS: copia un mp3 de prueba a MinIO por cada card, marca el deck READY al terminar
+Vista del deck mostrando su estado con polling htmx (PROCESSING pasa a READY sin recargar)
+Flujo de "Borrar Mazo"
+Prueba de punta a punta: subir CSV, ver processing, ver ready
+--> ACA YA TENES UN MVP FUNCIONAL COMPLETO, aunque el audio sea de mentira. Es un buen punto para hacer una pausa y sentir avance real.
+===================================
+BLOQUE D - TTS real con edge-tts
+Tiempo estimado: 4-6 horas repartidas
+Armar el container con edge-tts instalado, sumarlo al docker-compose
+Definir como lo invoca Java (ProcessBuilder ejecutando el comando dentro del container)
+Reemplazar el mock del bloque C por la llamada real: generar mp3 por card en el idioma objetivo, calculando hash para deduplicar
+Subir los mp3 a anki-audios en MinIO, guardar la url en cada Card
+Probar con 2-3 idiomas distintos, confirmar que el flujo sigue funcionando igual que con el mock
+===================================
+BLOQUE E - Algoritmo SM2 y pantalla de estudio
+Tiempo estimado: 8-10 horas repartidas
+Algoritmo SM2 puro en la capa de servicio, con pruebas simples de que las fechas e intervalos calculan bien (probarlo aislado antes de conectarlo a nada)
+Vista de estudio: mostrar palabra, reproductor de audio, boton de voltear card
+Los 5 botones de evaluacion de SM2 conectados con htmx, actualizando sin recargar y trayendo la siguiente card
+Vista de "Sesion completada por hoy"
+Pruebas de integracion del ciclo completo y persistencia en ReviewLog
+===================================
+BLOQUE F - Estadisticas y pulido de UI
+Tiempo estimado: 4-6 horas repartidas
+Vista de estadisticas (racha de dias, palabras dominadas vs en aprendizaje)
+Nav responsive con menu hamburguesa
+Sacar subrayado/color default de los links
+Revision general de i18n (que todo lo agregado en C, D y E tenga sus claves)
+===================================
+BLOQUE G - Dockerizacion completa y cierre
+Tiempo estimado: 3-5 horas repartidas
+Dockerfile de la app Spring Boot
+Integrar todo en un unico docker-compose.yml: app, MySQL, MinIO, container de TTS
+Prueba de la pila completa corriendo 100% en contenedores
+Cargar un mazo real, hacer una sesion de estudio completa de punta a punta, cerrar el MVP
+===================================
+QUEDA AFUERA DEL MVP (opcional a futuro)
+PWA (manifest.json + Service Worker)
