@@ -115,7 +115,6 @@ public class DataInitializer implements CommandLineRunner {
             Deck testDeck = new Deck();
             testDeck.setUser(admin);
             testDeck.setName("Inglés - Frases Frecuentes");
-            testDeck.setLangFrom(langEn);
             testDeck.setLangTo(langEs);
 
             deckRepository.save(testDeck);

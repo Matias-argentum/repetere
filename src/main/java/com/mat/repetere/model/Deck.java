@@ -23,15 +23,8 @@ public class Deck {
     private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "lang_from_id", nullable = false)
-    private Language langFrom;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "lang_to_id", nullable = false)
     private Language langTo;
-
-    @Column(name = "csv_minio_key")
-    private String csvMinioKey;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
