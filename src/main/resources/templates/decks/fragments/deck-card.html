@@ -6,9 +6,30 @@
        th:hx-target="'#deck-card-' + ${deck.id}"
        hx-swap="outerHTML"
 >
+    <div style="display: flex; justify-content: flex-end;">
+        <button th:hx-delete="@{/decks/{id}(id=${deck.id})}"
+                hx-target="#content"
+                hx-swap="innerHTML"
+                hx-confirm="Esta acción borrará el mazo apra siempre ¿está seguro?"
+                style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2; margin: 2px; background-color: red;">
+            Borrar mazo
+        </button>
+    </div>
     <p th:text="${deck.name}"></p>
     <p th:text="${deck.targetLanguageCode}"></p>
     <p th:text="${deck.status}"></p>
     <p th:text="${deck.cardCount}"></p>
     <p th:text="${deck.createdAt}"></p>
+    <div style="display: flex justify-content: space-around;">
+        <a th:hx-get="@{/decks/{id}/cards(id=${deck.id})}"
+           hx-target="#content"
+           hx-swap="innerHTML"
+           style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2; margin: 2px"
+        >
+            Ver Cartas
+        </a>
+        <button disabled  style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2; margin: 2px">
+            Estudiar
+        </button>
+    </div>
 </aside>

@@ -8,6 +8,7 @@ import java.util.List;
 
 public record DeckResponseDto(
         Long id,
+        Long userId,
         String name,
         DeckStatus status,
         String targetLanguageCode,
@@ -15,6 +16,6 @@ public record DeckResponseDto(
         LocalDateTime createdAt
 ) {
     public static DeckResponseDto fromEntity(Deck deck){
-        return new DeckResponseDto(deck.getId(), deck.getName(), deck.getDeckStatus(), deck.getLangTo().getCode(), 25, deck.getCreatedAt());
+        return new DeckResponseDto(deck.getId(), deck.getUser().getId(), deck.getName(), deck.getDeckStatus(), deck.getLangTo().getCode(), 25, deck.getCreatedAt());
     }
 }

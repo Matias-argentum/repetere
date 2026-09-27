@@ -1,0 +1,8 @@
+
+<aside th:fragment="cardCard(card)"
+       th:id="'card-' + ${card.id}"
+>
+    <p th:text="${card.wordTarget}"></p>
+    <p th:text="${card.phonetic}"></p>
+    <p th:text="${card.sentenceTarget}"></p>
+</aside>

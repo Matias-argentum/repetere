@@ -52,6 +52,7 @@ public class DeckCreator {
 
         return new DeckResponseDto(
                 savedDeck.getId(),
+                ownerId,
                 savedDeck.getName(),
                 savedDeck.getDeckStatus(),
                 targetLanguage.getCode(),
