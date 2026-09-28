@@ -1,0 +1,5 @@
+fastapi[standard]
+edge-tts
+minio
+python-dotenv
+pydantic
