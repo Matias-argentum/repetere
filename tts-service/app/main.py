@@ -10,7 +10,7 @@ app = FastAPI(title="TTS Service", version="1.0.0")
 def read_root():
     return {"message": "TTS Service Running!"}
 
-# Función para procesar UNA sola card
+# funcion para procesar una sola card
 async def process_single_card(card, minio_lang_folder_path: str, voice: str) -> CardAudioResult:
     word_key = f"{minio_lang_folder_path}/{card.word_hash}.mp3"
     sentence_key = f"{minio_lang_folder_path}/{card.sentence_hash}.mp3"
@@ -35,16 +35,16 @@ async def process_single_card(card, minio_lang_folder_path: str, voice: str) -> 
         sentence_reused=sentence_reused
     )
 
-# Endpoint principal
+# endpoint
 @app.post("/api/v1/audio/generate", response_model=AudioGenerationResponse)
 async def generate_audios(payload: AudioGenerationRequest):
-    # Creamos una lista de tareas: una invocación por cada card recibida
+    # crea una lista de tareas: una invocacion por cada card recibida
     tasks = [
         process_single_card(card, payload.minio_lang_folder_path, payload.voice)
         for card in payload.cards
     ]
 
-    # Ejecuta TODAS las cards en paralelo y espera a que terminen
+    # ejecuta todas las cards en paralelo y espera a que terminen
     results = await asyncio.gather(*tasks)
 
     return AudioGenerationResponse(cards=results)
