@@ -20,6 +20,7 @@ class AudioGenerationRequest(BaseModel):
 class CardAudioResult(BaseModel):
     id: int
     word_audio_key: str
+    sentence_audio_key: str
     word_reused: bool
     sentence_reused: bool
 

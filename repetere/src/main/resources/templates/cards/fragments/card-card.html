@@ -1,8 +1,22 @@
+<aside th:fragment="cardCard(card)"        th:id="'card-' + ${card.id}" >
 
-<aside th:fragment="cardCard(card)"
-       th:id="'card-' + ${card.id}"
->
-    <p th:text="${card.wordTarget}"></p>
-    <p th:text="${card.phonetic}"></p>
-    <p th:text="${card.sentenceTarget}"></p>
+    <label style="display: block; font-size: 0.8rem; color: #666; margin-bottom: 2px;">Palabra</label>
+
+    <div style="display: inline-flex; align-items: center; gap: 10px; width: 100%; margin-bottom: 10px;">
+        <span th:text="${card.wordTarget}" style="font-weight: bold; min-width: 50%;"></span>
+        <audio th:if="${card.wordTargetAudioUrl}" controls style="height: 28px; width: 50%;">
+            <source th:src="${card.wordTargetAudioUrl}" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <p th:text="${card.phonetic}" style="margin: 0 0 10px 0; color: #666; font-style: italic;"></p>
+
+    <label style="display: block; font-size: 0.8rem; color: #666; margin-bottom: 2px;">Oración</label>
+
+    <div style="display: inline-flex; align-items: center; gap: 10px; width: 100%;">
+        <span th:text="${card.sentenceTarget}" style="font-weight: bold; min-width: 50%;"></span>
+        <audio th:if="${card.sentenceTargetAudioUrl}" controls style="height: 28px; width: 50%;">
+            <source th:src="${card.sentenceTargetAudioUrl}" type="audio/mpeg">
+        </audio>
+    </div>
 </aside>
