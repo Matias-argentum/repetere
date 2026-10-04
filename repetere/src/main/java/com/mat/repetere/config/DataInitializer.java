@@ -1,7 +1,13 @@
 package com.mat.repetere.config;
 
+import com.mat.repetere.dto.study.Sm2CalculatorRequestDto;
+import com.mat.repetere.dto.study.Sm2CalculatorResponseDto;
 import com.mat.repetere.model.*;
-import com.mat.repetere.repository.*;
+import com.mat.repetere.repository.DeckRepository;
+import com.mat.repetere.repository.LanguageRepository;
+import com.mat.repetere.repository.PromptTemplateRepository;
+import com.mat.repetere.repository.UserRepository;
+import com.mat.repetere.service.study.Sm2Calculator;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -12,7 +18,7 @@ public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final LanguageRepository languageRepository;
     private final DeckRepository deckRepository;
-    private final  PromptTemplateRepository promptTemplateRepository;
+    private final PromptTemplateRepository promptTemplateRepository;
     private final PasswordEncoder passwordEncoder;
 
     public DataInitializer(UserRepository userRepository,
@@ -28,6 +34,24 @@ public class DataInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        Sm2Calculator calculator = new Sm2Calculator();
+
+        // Card nueva, el usuario responde "fácil" (rating 5)
+        Sm2CalculatorResponseDto result1 = calculator.calculate(new Sm2CalculatorRequestDto(2.5, 0, 0, 5));
+        System.out.println("Respuesta 1");
+        System.out.println(result1);
+
+        // Esa misma card, ahora con esos valores nuevos, el usuario responde "difícil" (rating 3)
+        Sm2CalculatorResponseDto result2 = calculator.calculate(new Sm2CalculatorRequestDto(result1.newEaseFactor(), result1.newRepetitions(), result1.newIntervalDays(), 3));
+        System.out.println("Respuesta 2");
+        System.out.println(result2);
+
+        // Esa card, ahora falla (rating 0, "no recuerdo")
+        Sm2CalculatorResponseDto result3 = calculator.calculate(new Sm2CalculatorRequestDto(result2.newEaseFactor(), result2.newRepetitions(), result2.newIntervalDays(), 0));
+        System.out.println("Respuesta 3");
+        System.out.println(result3);
+
+
         // cargar idiomas si noe xisten
         if (languageRepository.count() == 0) {
             Language english = new Language();
@@ -80,7 +104,7 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("-> Idiomas de prueba cargados.");
         }
 
-        if (userRepository.count() == 1){
+        if (userRepository.count() == 1) {
             User user = new User();
             user.setName("user");
             user.setEmail("user@repetere.com");
@@ -121,34 +145,34 @@ public class DataInitializer implements CommandLineRunner {
             System.out.println("-> Mazo de prueba creado.");
         }
 
-        if (promptTemplateRepository.count() == 0){
+        if (promptTemplateRepository.count() == 0) {
             PromptTemplate template = new PromptTemplate();
             template.setActive(true);
             template.setNativeLanguage(NativeLanguage.ES);
             template.setText("""
-                    Hola, quiero aprender el idioma: {targetLanguage}. Mi idioma nativo es: {nativeLanguage}. Mi nivel actual es: {level}.
+                            Hola, quiero aprender el idioma: {targetLanguage}. Mi idioma nativo es: {nativeLanguage}. Mi nivel actual es: {level}.
                     
-                    Necesito un archivo en formato CSV donde cada línea represente una tarjeta para aprender mediante repetición espaciada, sobre el tema: {topic}.
+                            Necesito un archivo en formato CSV donde cada línea represente una tarjeta para aprender mediante repetición espaciada, sobre el tema: {topic}.
                     
-                    Cada línea debe tener exactamente estos 5 campos, separados por punto y coma (;), en este orden exacto:
-                    palabra_en_idioma_objetivo;pronunciacion_fonetica;traduccion_a_mi_idioma_nativo;frase_de_ejemplo_en_idioma_objetivo;traduccion_de_la_frase_a_mi_idioma_nativo
+                            Cada línea debe tener exactamente estos 5 campos, separados por punto y coma (;), en este orden exacto:
+                            palabra_en_idioma_objetivo;pronunciacion_fonetica;traduccion_a_mi_idioma_nativo;frase_de_ejemplo_en_idioma_objetivo;traduccion_de_la_frase_a_mi_idioma_nativo
                     
-                    Reglas estrictas:
-                    - Máximo 25 líneas.
-                            - Las frases de ejemplo no pueden superar los 140 caracteres cada una.
-                            - No agregues encabezado ni títulos, solo las líneas de datos.
-                    - No agregues líneas en blanco entre los datos.
-                            - No agregues espacios antes o después de cada punto y coma.
-                    - No uses comillas ni caracteres especiales que no sean los normales del idioma.
-                    - Cada línea termina con un salto de línea simple, sin líneas vacías extra al final.
-                    - El vocabulario y la complejidad de las frases deben ser apropiados para el nivel {level} según el Marco Común Europeo de Referencia (MCER/CEFR).
-                    - No incluyas ningún carácter invisible, marca de codificación (BOM), ni metadatos al inicio del archivo. La primera línea debe comenzar directamente con el primer campo de datos.
-                            Ejemplo de una línea válida:
-                    hello;/heˈloʊ/;hola;hello my name is Juan;hola mi nombre es Juan
+                            Reglas estrictas:
+                            - Máximo 25 líneas.
+                                    - Las frases de ejemplo no pueden superar los 140 caracteres cada una.
+                                    - No agregues encabezado ni títulos, solo las líneas de datos.
+                            - No agregues líneas en blanco entre los datos.
+                                    - No agregues espacios antes o después de cada punto y coma.
+                            - No uses comillas ni caracteres especiales que no sean los normales del idioma.
+                            - Cada línea termina con un salto de línea simple, sin líneas vacías extra al final.
+                            - El vocabulario y la complejidad de las frases deben ser apropiados para el nivel {level} según el Marco Común Europeo de Referencia (MCER/CEFR).
+                            - No incluyas ningún carácter invisible, marca de codificación (BOM), ni metadatos al inicio del archivo. La primera línea debe comenzar directamente con el primer campo de datos.
+                                    Ejemplo de una línea válida:
+                            hello;/heˈloʊ/;hola;hello my name is Juan;hola mi nombre es Juan
                     
-                    Ten en cuenta además las siguientes aclaraciones: {clarifications}
+                            Ten en cuenta además las siguientes aclaraciones: {clarifications}
                     
-            """);
+                    """);
 
             promptTemplateRepository.save(template);
         }
