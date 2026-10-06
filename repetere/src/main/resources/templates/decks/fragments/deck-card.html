@@ -28,8 +28,12 @@
         >
             Ver Cartas
         </a>
-        <button disabled  style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2; margin: 2px">
+        <a
+                th:hx-get="@{/decks/{id}/study(id=${deck.id})}"
+                hx-target="#content"
+                hx-swap="innerHTML"
+                style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2; margin: 2px">
             Estudiar
-        </button>
+        </a>
     </div>
 </aside>

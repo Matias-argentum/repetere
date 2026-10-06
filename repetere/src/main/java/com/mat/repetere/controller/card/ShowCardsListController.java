@@ -2,7 +2,6 @@ package com.mat.repetere.controller.card;
 
 import com.mat.repetere.dto.card.CardResponseDto;
 import com.mat.repetere.dto.deck.DeckResponseDto;
-import com.mat.repetere.model.Deck;
 import com.mat.repetere.security.CustomUserDetails;
 import com.mat.repetere.service.card.CardSearcher;
 import com.mat.repetere.service.deck.DeckFinder;

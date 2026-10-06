@@ -1,11 +1,16 @@
 package com.mat.repetere.service.card;
 
 import com.mat.repetere.dto.card.CardResponseDto;
+import com.mat.repetere.dto.study.StudyCardDto;
+import com.mat.repetere.model.Card;
+import com.mat.repetere.model.CardState;
 import com.mat.repetere.repository.CardRepository;
 import com.mat.repetere.service.file.FileService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CardSearcher {
@@ -27,5 +32,23 @@ public class CardSearcher {
                         throw new RuntimeException(e);
                     }
                 }).toList();
+    }
+
+    public Optional<StudyCardDto> findNextDueCard(Long deckId){
+        List<Card> dueCards = repository.findDueCards(deckId, CardState.NEW, LocalDateTime.now());
+        if (dueCards.isEmpty()){
+            return Optional.empty();
+        }
+        Card nextDueCard = dueCards.getFirst();
+
+        try {
+            StudyCardDto nextCard = StudyCardDto.fromCardEntity(nextDueCard,
+                    fileService.getPresignedUrl(nextDueCard.getWordAudioHash()),
+                    fileService.getPresignedUrl(nextDueCard.getSentenceAudioHash())
+                    );
+            return Optional.of(nextCard);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
