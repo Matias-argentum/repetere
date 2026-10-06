@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:fragment="page" th:replace="~{layout/main-layout :: layout(~{::content}, ~{::title})}">
+        <title>Estudiar - Repetere</title>
+    </th:block>
+</head>
+<body>
+<div th:fragment="content" id="content">
+
+    <div th:if="${card}">
+
+        <p style="font-size: 0.85rem; color: white; text-align: center;">
+            Elegí con honestidad: "No recuerdo" hace que esta tarjeta vuelva a aparecer pronto (mañana), mientras que "Difícil", "Medio" y "Fácil" espacian la próxima repetición cada vez más.
+        </p>
+
+        <div th:id="'study-card-' + ${card.id}" style="border: 1px solid #ccc; border-radius: 8px; padding: 20px; min-height: 350px; max-width: 500px; margin: 0 auto;">
+
+            <div style="text-align: right;">
+                <span onclick="const c = this.closest('[id^=study-card-]'); const f = c.querySelector('.card-front'); const b = c.querySelector('.card-back'); const showingFront = f.style.display !== 'none'; f.style.display = showingFront ? 'none' : 'block'; b.style.display = showingFront ? 'block' : 'none';"
+                      style="cursor: pointer; font-size: 1.2rem;">DAR VUELTA</span>
+            </div>
+
+            <div class="card-front" style="text-align: center;">
+                <label style="display: block; font-size: 0.8rem; color: white;">Palabra</label>
+                <p th:text="${card.wordTarget}" style="font-size: 1.8rem; font-weight: bold; margin: 5px 0;"></p>
+                <p th:text="${card.phonetic}" style="color: white; font-style: italic; margin: 0 0 10px 0;"></p>
+                <audio th:if="${card.wordTargetAudioUrl}" controls style="width: 100%;">
+                    <source th:src="${card.wordTargetAudioUrl}" type="audio/mpeg">
+                </audio>
+                <hr style="margin: 20px 0;">
+                <label style="display: block; font-size: 0.8rem; color: white;">Oración</label>
+                <p th:text="${card.sentenceTarget}" style="font-size: 1.1rem; margin: 5px 0;"></p>
+                <audio th:if="${card.sentenceTargetAudioUrl}" controls style="width: 100%;">
+                    <source th:src="${card.sentenceTargetAudioUrl}" type="audio/mpeg">
+                </audio>
+            </div>
+
+            <div class="card-back" style="display: none; text-align: center;">
+                <label style="display: block; font-size: 0.8rem; color: white;">Traducción</label>
+                <p th:text="${card.wordTranslation}" style="font-size: 1.8rem; font-weight: bold; margin: 5px 0;"></p>
+                <hr style="margin: 20px 0;">
+                <p th:text="${card.sentenceTranslation}" style="font-size: 1.1rem; color: white;"></p>
+            </div>
+
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px; max-width: 500px; margin-left: auto; margin-right: auto;">
+            <button th:hx-post="@{/decks/{deckId}/study/rate(deckId=${deckId}, cardId=${card.id}, rating=0)}"
+                    hx-target="#content" hx-swap="innerHTML"
+                    style="background-color: #c0392b; flex: 1; padding: 6px 12px; font-size: 0.9rem; line-height: 1.2;">No recuerdo</button>
+
+            <button th:hx-post="@{/decks/{deckId}/study/rate(deckId=${deckId}, cardId=${card.id}, rating=3)}"
+                    hx-target="#content" hx-swap="innerHTML"
+                    style="background-color: #e67e22; flex: 1; padding: 6px 12px; font-size: 0.9rem; line-height: 1.2;">Difícil</button>
+
+            <button th:hx-post="@{/decks/{deckId}/study/rate(deckId=${deckId}, cardId=${card.id}, rating=4)}"
+                    hx-target="#content" hx-swap="innerHTML"
+                    style="background-color: #27ae60; flex: 1; padding: 6px 12px; font-size: 0.9rem; line-height: 1.2;">Medio</button>
+
+            <button th:hx-post="@{/decks/{deckId}/study/rate(deckId=${deckId}, cardId=${card.id}, rating=5)}"
+                    hx-target="#content" hx-swap="innerHTML"
+                    style="background-color: #2980b9; flex: 1; padding: 6px 12px; font-size: 0.9rem; line-height: 1.2;">Fácil</button>
+        </div>
+
+    </div>
+
+    <div th:unless="${card}">
+        <h3>¡Mazo terminado por hoy!</h3>
+        <p>No quedan más tarjetas pendientes de repaso.</p>
+        <a th:href="@{/decks}" hx-target="#content" hx-swap="innerHTML">Volver a Mis Mazos</a>
+    </div>
+
+</div>
+</body>
+</html>
