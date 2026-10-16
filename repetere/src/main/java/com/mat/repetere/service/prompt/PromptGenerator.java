@@ -2,7 +2,7 @@ package com.mat.repetere.service.prompt;
 
 import com.mat.repetere.dto.prompt.GeneratePromptRequestDto;
 import com.mat.repetere.exception.LanguageNotFoundException;
-import com.mat.repetere.exception.PromptNotFpundException;
+import com.mat.repetere.exception.PromptNotFoundException;
 import com.mat.repetere.model.Language;
 import com.mat.repetere.model.NativeLanguage;
 import com.mat.repetere.repository.LanguageRepository;
@@ -23,7 +23,7 @@ public class PromptGenerator {
 
     public String generatePrompt(GeneratePromptRequestDto request, NativeLanguage nativeLanguage){
 
-        String template = promptTemplateRepository.findByNativeLanguageAndActive(nativeLanguage, true).orElseThrow(()-> new PromptNotFpundException("Prompt not found")).getText();
+        String template = promptTemplateRepository.findByNativeLanguageAndActive(nativeLanguage, true).orElseThrow(()-> new PromptNotFoundException("Prompt not found")).getText();
         Language targetLanguage = languageRepository.findById(request.targetLanguageId()).orElseThrow(()-> new LanguageNotFoundException("Language not found"));
         template = template.replace("{targetLanguage}", targetLanguage.getName());
         template = template.replace("{nativeLanguage}", nativeLanguage.name());

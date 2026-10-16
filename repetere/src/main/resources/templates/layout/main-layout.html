@@ -54,6 +54,14 @@
         document.getElementById('dialog-modal').hidePopover();
     });
 
+    document.body.addEventListener('htmx:beforeSwap', function (evt) {
+    const status = evt.detail.xhr.status;
+    if (status === 403 || status === 404 || status === 500) {
+        evt.detail.shouldSwap = true;
+        evt.detail.isError = false;
+    }
+});
+
 </script>
 </body>
 </html>

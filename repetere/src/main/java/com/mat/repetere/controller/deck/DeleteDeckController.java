@@ -1,6 +1,7 @@
 package com.mat.repetere.controller.deck;
 
 import com.mat.repetere.dto.deck.DeckResponseDto;
+import com.mat.repetere.exception.UnauthorizedRequest;
 import com.mat.repetere.security.CustomUserDetails;
 import com.mat.repetere.service.deck.DeckDeleter;
 import com.mat.repetere.service.deck.DeckFinder;
@@ -33,7 +34,7 @@ public class DeleteDeckController {
     public String deleteDeck(@PathVariable Long id, @AuthenticationPrincipal CustomUserDetails loggedUser, Model model){
         DeckResponseDto foundDeck = deckFinder.findById(id);
         if (!Objects.equals(foundDeck.userId(), loggedUser.getId())){
-            throw new RuntimeException("Invalid id");
+            throw new UnauthorizedRequest("Invalid id");
         }
         deckDeleter.delete(id);
 

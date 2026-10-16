@@ -1,6 +1,5 @@
 package com.mat.repetere.dto.study;
 
-import com.mat.repetere.dto.card.CardResponseDto;
 import com.mat.repetere.model.Card;
 
 public record StudyCardDto(

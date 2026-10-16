@@ -2,6 +2,7 @@ package com.mat.repetere.controller.card;
 
 import com.mat.repetere.dto.card.CardResponseDto;
 import com.mat.repetere.dto.deck.DeckResponseDto;
+import com.mat.repetere.exception.UnauthorizedRequest;
 import com.mat.repetere.security.CustomUserDetails;
 import com.mat.repetere.service.card.CardSearcher;
 import com.mat.repetere.service.deck.DeckFinder;
@@ -32,7 +33,7 @@ public class ShowCardsListController {
     public String findAll(@AuthenticationPrincipal CustomUserDetails loggedUser, Model model, HttpServletRequest request, @PathVariable Long id){
         DeckResponseDto deck = deckFinder.findById(id);
         if (!Objects.equals(deck.userId(), loggedUser.getId())){
-            throw new RuntimeException("Not allowed");
+            throw new UnauthorizedRequest("Cannot delete this deck");
         }
 
         List<CardResponseDto> cardList = cardSearcher.findAllByDeckId(id);

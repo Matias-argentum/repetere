@@ -1,5 +1,6 @@
 package com.mat.repetere.service.card;
 
+import com.mat.repetere.exception.CardNotFoundException;
 import com.mat.repetere.model.Card;
 import com.mat.repetere.repository.CardRepository;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,6 @@ public class CardFinder {
     }
 
     public Card findById(Long cardId){
-        return repository.findById(cardId).orElseThrow(() -> new RuntimeException("CArd not found"));
+        return repository.findById(cardId).orElseThrow(() -> new CardNotFoundException("CArd not found"));
     }
 }
