@@ -2,6 +2,7 @@ package com.mat.repetere.service.card;
 
 import com.mat.repetere.dto.card.CardResponseDto;
 import com.mat.repetere.dto.study.StudyCardDto;
+import com.mat.repetere.exception.StorageException;
 import com.mat.repetere.model.Card;
 import com.mat.repetere.model.CardState;
 import com.mat.repetere.repository.CardRepository;
@@ -29,7 +30,7 @@ public class CardSearcher {
                     try {
                         return CardResponseDto.fromEntity(card,  fileService.getPresignedUrl(card.getWordAudioHash()), fileService.getPresignedUrl(card.getSentenceAudioHash()));
                     } catch (Exception e) {
-                        throw new RuntimeException(e);
+                        throw new StorageException("Could not generate audio links");
                     }
                 }).toList();
     }
@@ -48,7 +49,7 @@ public class CardSearcher {
                     );
             return Optional.of(nextCard);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new StorageException("Could not generate audio links");
         }
     }
 }

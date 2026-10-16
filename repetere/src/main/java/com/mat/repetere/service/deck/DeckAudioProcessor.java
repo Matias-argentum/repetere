@@ -4,12 +4,12 @@ import com.mat.repetere.dto.deck.TtsCardGenerationRequestDto;
 import com.mat.repetere.dto.deck.TtsCardGenerationResponseDto;
 import com.mat.repetere.dto.deck.TtsGenerationRequestDto;
 import com.mat.repetere.dto.deck.TtsGenerationResponseDto;
+import com.mat.repetere.exception.DeckNotFoundException;
 import com.mat.repetere.model.Card;
 import com.mat.repetere.model.Deck;
 import com.mat.repetere.model.DeckStatus;
 import com.mat.repetere.repository.CardRepository;
 import com.mat.repetere.repository.DeckRepository;
-import com.mat.repetere.service.file.FileService;
 import jakarta.transaction.Transactional;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
@@ -42,7 +42,7 @@ public class DeckAudioProcessor {
     @Transactional
     public void generateAudios(Long deckId) {
         System.out.println("entramos al async CON EL DECK ID RECIBIDO DESDE EL CREATOR: " + deckId);
-        Deck deck = deckRepository.findById(deckId).orElseThrow( () -> new RuntimeException("Deck not found"));
+        Deck deck = deckRepository.findById(deckId).orElseThrow( () -> new DeckNotFoundException("Deck not found"));
         String langCode = deck.getLangTo().getCode();
         String folderPath = langCode;
         String voice = deck.getLangTo().getTtsVoice();

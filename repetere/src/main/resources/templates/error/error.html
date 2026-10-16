@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:fragment="page" th:replace="~{layout/main-layout :: layout(~{::content}, ~{::title})}">
+        <title>Error - Repetere</title>
+    </th:block>
+</head>
+<body>
+<div th:fragment="content">
+    <h3 th:text="${errorTitle} ?: 'Algo salió mal'"></h3>
+    <p th:text="${errorMessage} ?: 'Ocurrió un error inesperado.'"></p>
+    <a th:href="@{/dashboard}">Volver al inicio</a>
+</div>
+</body>
+</html>
