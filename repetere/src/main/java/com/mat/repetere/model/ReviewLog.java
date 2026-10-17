@@ -28,6 +28,6 @@ public class ReviewLog {
     private int ratingChosen;
 
     @Column(name = "reviewed_at", nullable = false, updatable = false)
-    private LocalDateTime reviewedAt = LocalDateTime.now();
+    private LocalDateTime reviewedAt;
 
 }

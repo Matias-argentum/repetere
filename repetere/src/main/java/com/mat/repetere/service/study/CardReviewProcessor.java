@@ -12,6 +12,7 @@ import com.mat.repetere.service.card.CardFinder;
 import com.mat.repetere.service.card.CardSearcher;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 
 @Service
@@ -22,13 +23,15 @@ public class CardReviewProcessor {
     private final CardRepository cardRepository;
     private final ReviewLogRepository reviewLogRepository;
     private final CardSearcher cardSearcher;
+    private final Clock clock;
 
-    public CardReviewProcessor(CardFinder cardFinder, Sm2Calculator sm2Calculator, CardRepository cardRepository, ReviewLogRepository reviewLogRepository, CardSearcher cardSearcher) {
+    public CardReviewProcessor(CardFinder cardFinder, Sm2Calculator sm2Calculator, CardRepository cardRepository, ReviewLogRepository reviewLogRepository, CardSearcher cardSearcher, Clock clock) {
         this.cardFinder = cardFinder;
         this.sm2Calculator = sm2Calculator;
         this.cardRepository = cardRepository;
         this.reviewLogRepository = reviewLogRepository;
         this.cardSearcher = cardSearcher;
+        this.clock = clock;
     }
 
     public StudyCardDto submitRating(Long cardId, Long deckId, int rating) {
@@ -40,7 +43,7 @@ public class CardReviewProcessor {
         card.setEaseFactor(result.newEaseFactor());
         card.setRepetitions(result.newRepetitions());
         card.setIntervalDays(result.newIntervalDays());
-        card.setNextReviewAt(LocalDateTime.now().plusDays(result.newIntervalDays()));
+        card.setNextReviewAt(LocalDateTime.now(clock).plusDays(result.newIntervalDays()));
         if (result.newIntervalDays() >= 7) {
             card.setCardState(CardState.REVIEW);
         } else {
@@ -50,7 +53,7 @@ public class CardReviewProcessor {
         ReviewLog reviewLog = new ReviewLog();
         reviewLog.setCard(card);
         reviewLog.setRatingChosen(rating);
-        reviewLog.setReviewedAt(LocalDateTime.now());
+        reviewLog.setReviewedAt(LocalDateTime.now(clock));
         reviewLogRepository.save(reviewLog);
 
         return cardSearcher.findNextDueCard(deckId).orElse(null);
