@@ -7,18 +7,25 @@
 </head>
 <body>
 <div th:fragment="content" id="content">
-    <h3 th:text="${'Cards in deck -> '} + ${deckName}"></h3>
-    <br>
-    <div th:fragment="card-list-div">
-        <div th:if="${successMessage}">
-            <p><code th:text="${successMessage}"></code></p>
+
+    <div style="max-width: 1000px; margin: 0 auto 20px auto;">
+        <h2 th:text="${'Cartas en el mazo -> '} + ${deckName}" style="margin-bottom: 5px;"></h2>
+        <p style="color: var(--text-muted); margin-top: 0;">Solo muestra las cards en el idioma objetivo.</p>
+    </div>
+
+    <div th:fragment="card-list-div" style="max-width: 1000px; margin: 0 auto;">
+
+        <div th:if="${successMessage}" style="margin-bottom: 15px; padding: 10px; background-color: rgba(39, 174, 96, 0.1); border-left: 4px solid #27ae60; border-radius: 4px;">
+            <code th:text="${successMessage}" style="color: #27ae60;"></code>
         </div>
-        <section  id="card-list" style="display: flex;">
+
+        <!-- Usamos flex con wrap para organizar las tarjetas -->
+        <section id="card-list" class="cards-flex-container">
             <th:block th:each="card : ${cards}">
-                <div th:replace="~{cards/fragments/card-card :: cardCard(${card})}"></div>
+                <div class="card-item-wrapper" th:replace="~{cards/fragments/card-card :: cardCard(${card})}"></div>
             </th:block>
         </section>
-        <br>
+
     </div>
 </div>
 </body>

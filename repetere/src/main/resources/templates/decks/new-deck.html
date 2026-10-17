@@ -7,30 +7,39 @@
 </head>
 <body>
 <div th:fragment="content" id="content">
-    <h3>Crear Mazo</h3>
 
-    <section id="deck-form-section">
-        <form th:action="@{/decks/new}" method="post" enctype="multipart/form-data">
+    <div class="form-card" style="background-color: var(--bg-color);">
+        <h2 style="margin-top: 0; margin-bottom: 20px;">Crear Mazo</h2>
 
-            <label for="targetLanguageId">Idioma objetivo del mazo: </label>
-            <select id="targetLanguageId" name="targetLanguageId" required>
-                <option th:each="language : ${languages}"
-                        th:value="${language.id}"
-                        th:text="${language.name}"></option>
-            </select>
+        <section id="deck-form-section">
+            <form th:action="@{/decks/new}" method="post" enctype="multipart/form-data">
 
-            <label for="deck-name">Nombre del mazo:</label>
-            <input type="text" id="deck-name" name="deckName" placeholder="Vocabulario sobre cosas de la casa" required>
+                <div class="form-group">
+                    <label for="targetLanguageId">Idioma objetivo del mazo:</label>
+                    <select id="targetLanguageId" name="targetLanguageId" required>
+                        <option th:each="language : ${languages}"
+                                th:value="${language.id}"
+                                th:text="${language.name}"></option>
+                    </select>
+                </div>
 
-            <label for="deck-csv">Archivo CSV:</label>
-            <input id="deck-csv" type="file" name="deckCsv" required accept="text/csv">
+                <div class="form-group">
+                    <label for="deck-name">Nombre del mazo:</label>
+                    <input type="text" id="deck-name" name="deckName" placeholder="Ej: Vocabulario de la casa" required>
+                </div>
 
-            <br>
-            <button type="submit">Crear Mazo</button>
-        </form>
-    </section>
+                <div class="form-group">
+                    <label for="deck-csv">Archivo CSV:</label>
+                    <input id="deck-csv" type="file" name="deckCsv" required accept="text/csv">
+                </div>
 
-    <br>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 15px;">
+                    Crear Mazo
+                </button>
+            </form>
+        </section>
+    </div>
+
 </div>
 </body>
 </html>

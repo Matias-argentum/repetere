@@ -5,27 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenido a Repetere</title>
     <link rel="stylesheet" th:href="@{/css/mvp.css}" href="../static/css/mvp.css">
+    <link rel="stylesheet" th:href="@{/css/customStyles.css}" href="../static/css/customStyles.css">
 </head>
-<body>
-    <main>
-        <header>
-            <h1>Bienvenido a Repetere</h1>
-            <p>Repetición espaciada para el aprendizaje eficiente de idiomas.</p>
-        </header>
+<body class="welcome-body">
 
-        <section>
-            <h2>¿Para qué srive?</h2>
-            <ul>
-                <li><strong>Repaso:</strong> Algoritmo que se llama SM-2 para repetir y retener.</li>
-                <li><strong>Soporte Multilingüe:</strong> Audio TTS integrado (espero poder integrarlo).</li>
-                <li><strong>Control:</strong> Gestión personalizada de mazos y tarjetas.</li>
-            </ul>
-        </section>
+<main class="welcome-container">
 
-        <section>
-            <p>Para empezar a repasar tus mazos, inicia sesión:</p>
-            <a th:href="@{/login}"><button>Iniciar Sesión</button></a>
-        </section>
-    </main>
+    <header class="welcome-header">
+        <h1>Bienvenido a Repetere</h1>
+        <p>Repetición espaciada para el aprendizaje eficiente de idiomas.</p>
+    </header>
+
+    <section class="welcome-section">
+        <h3 class="welcome-section-title">¿Para qué sirve?</h3>
+        <ul class="welcome-list">
+            <li><strong>Repaso inteligente:</strong> Algoritmo SM-2 para repetir y retener a largo plazo.</li>
+            <li><strong>Soporte Multilingüe:</strong> Audio TTS integrado para mejorar la pronunciación.</li>
+            <li><strong>Control total:</strong> Gestión personalizada de mazos y tarjetas.</li>
+        </ul>
+    </section>
+
+    <section class="welcome-footer">
+        <p>Para empezar a repasar tus mazos, inicia sesión:</p>
+        <a th:href="@{/login}" class="btn btn-outline" style="padding: 10px 24px; font-size: 1rem; text-decoration: none; color: white;">
+            Iniciar Sesión
+        </a>
+    </section>
+
+</main>
+
 </body>
 </html>

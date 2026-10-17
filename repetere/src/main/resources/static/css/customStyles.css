@@ -1,0 +1,577 @@
+/* --- Variables y Paleta de Colores --- */
+:root {
+    --bg-color: #363230;          /* Fondo general oscuro */
+    --surface-color: #5C5552;     /* Tarjetas, aside y menús */
+    --text-color: #F5F5F7;        /* Texto principal muy legible */
+    --text-muted: #D1CDBC;        /* Texto secundario/etiquetas */
+    --border-color: #AFA98D;      /* Bordes y detalles */
+
+    --primary-color: #6CD4FF;     /* Acentos principales y links */
+    --secondary-color: #D999B9;   /* Botones secundarios / Ver cartas */
+    --danger-color: #F7717D;      /* Botón de borrar / peligros */
+}
+
+/* --- Estilos Generales --- */
+body {
+    background-color: var(--bg-color) !important;
+    color: var(--text-color) !important;
+    font-family: system-ui, -apple-system, sans-serif;
+    margin: 0;
+}
+
+/* --- Enlaces y Navegación --- */
+a, a:visited {
+    color: var(--primary-color) !important;
+    text-decoration: none;
+    transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+a:hover {
+    opacity: 0.80;
+    text-decoration: none;
+}
+
+nav {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    margin-bottom: 1rem;
+}
+
+.hamburger-btn {
+    display: block;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 0.2rem 0.5rem;
+}
+
+/* Quitar estilos a los forms dentro del nav */
+
+nav form {
+    all: unset;
+}
+
+
+/* Menú flotante desplegable para Celulares */
+nav ul {
+    position: absolute;
+    top: 100%;
+    right: 1rem;
+    width: 200px;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    list-style: none;
+    margin: 0;
+    z-index: 1000;
+}
+
+/* Ajustes de escritorio */
+@media (min-width: 768px) {
+    .hamburger-btn {
+        display: none !important;
+    }
+
+    nav ul {
+            position: static !important;
+            display: flex !important; /* <--- IMPORTANTE: Anula el x-show de Alpine en PC */
+            width: auto !important;
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            gap: 1.2rem !important;
+        }
+}
+
+/* --- Clases Reutilizables de Botones --- */
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 0.875rem;
+    line-height: 1.2;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    font-weight: 500;
+    text-align: center;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #121212 !important;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: #121212 !important;
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: #121212 !important;
+}
+
+.btn-outline {
+    background-color: transparent;
+    border-color: var(--border-color);
+    color: var(--text-color) !important;
+}
+
+.btn-outline:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* --- Estilos para la Tarjeta de Mazo (`deckCard`) --- */
+aside {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+.deck-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.deck-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.deck-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+.deck-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+
+/* --- Contenedor y Tarjeta de Estudio con Altura Fija --- */
+.study-card-container {
+    max-width: 500px;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.flashcard {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    height: 420px;          /* <--- ALTURA FIJA: Evita que se mueva el DOM de abajo */
+    overflow: hidden;       /* <--- Oculta lo que sale de la tarjeta al deslizar */
+    position: relative;     /* <--- Ancla para las caras internas */
+    box-sizing: border-box;
+}
+
+/* Cada cara vive dentro de la caja fija ocupando el 100% */
+.card-face {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+/* Pantalla de generate prompt */
+
+/* --- Formularios y Tarjetas de Contenido --- */
+.form-card {
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 600px;
+    margin: 0 auto 20px auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+/* Estilos unificados para inputs, selects y textareas */
+input[type="text"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-color);
+    font-size: 0.95rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="password"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-color);
+    font-size: 0.95rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="email"],
+select,
+textarea {
+    width: 100%;
+    padding: 10px 12px;
+    background-color: var(--bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    color: var(--text-color);
+    font-size: 0.95rem;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input[type="text"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(108, 212, 255, 0.2);
+}
+
+/* Indicador e instrucciones para la sección de resultados */
+.prompt-result-card {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.prompt-header-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.instruction-box {
+    background-color: rgba(108, 212, 255, 0.1);
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+}
+
+/* Estilo personalizado para el input de tipo archivo */
+input[type="file"] {
+    padding: 8px;
+    background-color: var(--surface-color);
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button {
+    background-color: var(--primary-color);
+    color: #121212;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    margin-right: 10px;
+    transition: opacity 0.2s ease;
+}
+
+input[type="file"]::file-selector-button:hover {
+    opacity: 0.85;
+}
+
+/* --- Estilos para la Tarjeta de Perfil --- */
+.profile-card {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 600px;
+    margin: 0 auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.profile-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.profile-row:last-child {
+    border-bottom: none;
+}
+
+.profile-info label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.profile-info p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 4px 0 0 0;
+    color: var(--text-color);
+}
+
+/* --- Estilo para el componente <dialog> en Modo Oscuro --- */
+dialog {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Fondo oscuro translúcido para cuando se abre el popover/dialog */
+dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(2px);
+}
+/*Pantalla de inicio */
+
+/* --- Estilos para la Pantalla de Bienvenida --- */
+.welcome-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: var(--bg-color);
+}
+
+.welcome-container {
+    max-width: 550px;
+    width: 90%;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    text-align: left;
+}
+
+.welcome-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.welcome-header h1 {
+    margin-top: 0;
+    color: var(--text-color);
+}
+
+.welcome-header p {
+    color: var(--text-muted);
+}
+
+.welcome-section {
+    margin-bottom: 30px;
+}
+
+.welcome-section-title {
+    color: var(--primary-color);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+    margin-top: 0;
+}
+
+.welcome-list {
+    padding-left: 20px;
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+.welcome-footer {
+    text-align: center;
+}
+
+.welcome-footer p {
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+
+
+/* --- Estilos para el Dashboard (Tarjetas de Acceso Rápido) --- */
+.dashboard-cards-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    max-width: 900px;
+    margin: 10px auto;
+}
+
+.dashboard-card {
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--primary-color);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.dashboard-card a {
+    display: block;
+    text-decoration: none !important;
+}
+
+.dashboard-card h3 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: var(--primary-color);
+    font-size: 1.3rem;
+}
+
+.dashboard-card p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+
+
+/* --- Estilos para Páginas de Autenticación (Login / Registro) --- */
+.auth-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: var(--bg-color);
+}
+
+.auth-container {
+    max-width: 420px;
+    width: 90%;
+    background-color: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.auth-header h1 {
+    margin: 0 0 4px 0;
+    color: var(--text-color);
+}
+
+.auth-header p {
+    margin: 0;
+    color: var(--text-muted);
+}
+
+.alert-message {
+    padding: 10px 14px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 0.875rem;
+}
+
+.alert-error {
+    background-color: rgba(247, 113, 125, 0.15);
+    border: 1px solid var(--danger-color);
+    color: var(--danger-color);
+}
+
+.alert-info {
+    background-color: rgba(108, 212, 255, 0.15);
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+}
+
+.auth-footer {
+    text-align: center;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+}
+
+
+/* --- Contenedor Flex para listados de tarjetas --- */
+.cards-flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.card-item-wrapper {
+    flex: 1 1 300px; /* Crece, se encoge y tiene un ancho base ideal */
+    max-width: 100%;
+}

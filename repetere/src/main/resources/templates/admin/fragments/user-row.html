@@ -7,7 +7,7 @@
         <td th:text="${user.nativeLanguage}"></td>
         <td th:text="${user.role}"></td>
         <td>
-           <button type="button"
+           <button type="button" class="btn btn-primary"
                    th:hx-patch="@{/admin/users/{id}/toggle-active(id=${user.id})}"
                    th:text="${user.active} ? 'Deshabilitar' : 'Habilitar'"
                    hx-target="closest tr"
@@ -15,7 +15,7 @@
            ></button>
         </td>
         <td>
-            <button type="button"
+            <button type="button" class="btn btn-primary"
                     th:hx-patch="@{/admin/users/{id}/reset-password(id=${user.id})}"
                     th:text="${!user.forcePasswordChange ? 'Forzar cambio' : 'Ya forzado'}"
                     th:disabled="${user.forcePasswordChange}"

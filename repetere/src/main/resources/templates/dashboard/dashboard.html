@@ -7,28 +7,40 @@
 </head>
 <body>
 <div th:fragment="content">
-    <div>
-        <section>
-            <aside>
-                <a th:href="@{/decks}">
-                    <h3>Mazos</h3>
-                    <p>Ver y gestionar tus mazos de estudio</p>
-                </a>
-            </aside>
-            <aside>
-                <a th:href="@{/prompts/generate}">
-                    <h3>Generar Prompt</h3>
-                    <p>Crear tarjetas con IA</p>
-                </a>
-            </aside>
-            <aside>
-                <a th:href="@{/stats}">
-                    <h3>Estadísticas</h3>
-                    <p>Tu progreso y rendimiento</p>
-                </a>
-            </aside>
-        </section>
+
+    <div style="max-width: 900px; margin: 0 auto 10px auto;">
+        <h3>Panel Principal</h3>
     </div>
+
+    <section class="dashboard-cards-container">
+        <aside class="dashboard-card">
+            <a th:href="@{/decks}">
+                <h3>Mazos</h3>
+                <p>Ver tus mazos y estudiar</p>
+            </a>
+        </aside>
+
+        <aside class="dashboard-card">
+            <a th:href="@{/prompts/generate}">
+                <h3>Generar Prompt</h3>
+                <p>instrucciones para generar un archivo con IA</p>
+            </a>
+        </aside>
+
+        <aside class="dashboard-card">
+            <a th:href="@{/stats}">
+                <h3>Estadísticas</h3>
+                <p>Revisá tu progreso</p>
+            </a>
+        </aside>
+        <aside class="dashboard-card">
+            <a th:href="@{/profile}">
+                <h3>Mi perfil</h3>
+                <p>Gestioná tus datos</p>
+            </a>
+        </aside>
+    </section>
+
 </div>
 </body>
 </html>

@@ -1,38 +1,39 @@
-
 <aside th:fragment="deckCard(deck)"
        th:id="'deck-card-' + ${deck.id}"
        th:hx-get="${deck.status.name() == 'PROCESSING'} ? @{/decks/{id}/status(id=${deck.id})} : null"
        th:hx-trigger="${deck.status.name() == 'PROCESSING'} ? 'every 2s' : null"
        th:hx-target="'#deck-card-' + ${deck.id}"
-       hx-swap="outerHTML"
->
-    <div style="display: flex; justify-content: flex-end;">
-        <button th:hx-delete="@{/decks/{id}(id=${deck.id})}"
+       hx-swap="outerHTML">
+
+    <div class="deck-header">
+        <h3 class="deck-title" th:text="${deck.name}">Nombre del Mazo</h3>
+        <button class="btn btn-danger"
+                th:hx-delete="@{/decks/{id}(id=${deck.id})}"
                 hx-target="#content"
                 hx-swap="innerHTML"
-                hx-confirm="Esta acción borrará el mazo apra siempre ¿está seguro?"
-                style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2; margin: 2px; background-color: red;">
-            Borrar mazo
+                hx-confirm="Esta acción borrará el mazo para siempre. ¿Está seguro?">
+            Borrar
         </button>
     </div>
-    <p th:text="${deck.name}"></p>
-    <p th:text="${deck.targetLanguageCode}"></p>
-    <p th:text="${deck.status}"></p>
-    <p th:text="${deck.cardCount}"></p>
-    <p th:text="${deck.createdAt}"></p>
-    <div style="display: flex justify-content: space-around;">
-        <a th:hx-get="@{/decks/{id}/cards(id=${deck.id})}"
+
+    <div class="deck-info">
+        <p><strong>Idioma:</strong> <span th:text="${deck.targetLanguageCode}">ES</span></p>
+        <p><strong>Estado:</strong> <span th:text="${deck.status}">READY</span></p>
+        <p><strong>Cartas:</strong> <span th:text="${deck.cardCount}">0</span></p>
+        <p><strong>Creado:</strong> <span th:text="${#temporals.format(deck.createdAt, 'dd/MM/yyyy')}">01/01/2026</span></p>
+    </div>
+
+    <div class="deck-actions">
+        <a class="btn btn-secondary"
+           th:hx-get="@{/decks/{id}/cards(id=${deck.id})}"
            hx-target="#content"
-           hx-swap="innerHTML"
-           style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2; margin: 2px"
-        >
+           hx-swap="innerHTML">
             Ver Cartas
         </a>
-        <a
-                th:hx-get="@{/decks/{id}/study(id=${deck.id})}"
-                hx-target="#content"
-                hx-swap="innerHTML"
-                style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2; margin: 2px">
+        <a class="btn btn-primary"
+           th:hx-get="@{/decks/{id}/study(id=${deck.id})}"
+           hx-target="#content"
+           hx-swap="innerHTML">
             Estudiar
         </a>
     </div>

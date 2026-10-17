@@ -7,14 +7,21 @@
 </head>
 <body>
 <div th:fragment="content">
-    <h3>Users</h3>
-    <br>
-    <div th:fragment="users-table-div">
-        <div th:if="${successMessage}">
-            <p><code th:text="${successMessage}"></code></p>
+
+    <div style="max-width: 900px; margin: 0 auto 15px auto;">
+        <h2 style="margin-bottom: 5px;">Gestión de Usuarios</h2>
+        <p style="color: var(--text-muted); margin-top: 0;">Administra los usuarios registrados en el sistema.</p>
+    </div>
+
+    <div th:fragment="users-table-div" style="max-width: 900px; margin: 0 auto;">
+        <div th:if="${successMessage}" style="margin-bottom: 15px; padding: 10px; background-color: rgba(39, 174, 96, 0.1); border-left: 4px solid #27ae60; border-radius: 4px;">
+            <code th:text="${successMessage}" style="color: #27ae60;"></code>
         </div>
-        <table  id="users-table">
+
+        <!-- Tabla intacta tal como pediste -->
+        <table id="users-table">
             <thead>
+            <tr>
                 <th>ID</th>
                 <th>NAME</th>
                 <th>EMAIL</th>
@@ -22,6 +29,7 @@
                 <th>ROLE</th>
                 <th>ACTIVE</th>
                 <th>FORCE-CH</th>
+            </tr>
             </thead>
             <tbody>
             <th:block th:each="user : ${users}">
@@ -30,46 +38,53 @@
             </tbody>
         </table>
     </div>
-    <br>
-    <section>
-        <button style="margin-top: 1rem" popovertarget="dialog-modal" id="openDialog">Crear nuevo usuario</button>
 
-        <div th:if="${successMessage}">
-            <p><mark th:text="${successMessage}"></mark></p>
-        </div>
+    <div style="max-width: 900px; margin: 20px auto;">
+        <button popovertarget="dialog-modal" id="openDialog" class="btn btn-primary">Crear nuevo usuario</button>
 
         <dialog popover="" id="dialog-modal">
-            <h3>Añadir usuario</h3>
-            <hr>
+            <h3 style="margin-top: 0;">Añadir usuario</h3>
+            <hr style="border-color: var(--border-color); margin-bottom: 15px;">
+
             <form th:action="@{/admin/users}" method="post"
                   hx-target="#users-table"
                   hx-swap="outerHTML">
-                <div th:if="${errorMessage}">
-                    <p><mark th:text="${errorMessage}"></mark></p>
+
+                <div th:if="${errorMessage}" style="margin-bottom: 15px; padding: 10px; background-color: rgba(247, 113, 125, 0.1); border-left: 4px solid var(--danger-color); border-radius: 4px;">
+                    <code th:text="${errorMessage}" style="color: var(--danger-color);"></code>
                 </div>
-                <label for="name">Nombre:</label>
-                <input type="text" id="name" name="name" size="28" placeholder="Nombre" required>
 
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" placeholder="user@email.com" required>
+                <div class="form-group">
+                    <label for="name">Nombre:</label>
+                    <input type="text" id="name" name="name" placeholder="Nombre" required>
+                </div>
 
-                <label for="role">Rol:</label>
-                <select id="role" name="role">
-                    <option value="ADMIN">Admin</option>
-                    <option value="USER">User</option>
-                </select>
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" placeholder="user@email.com" required>
+                </div>
 
-                <label for="nativeLanguage">Idioma Nativo:</label>
-                <select id="nativeLanguage" name="nativeLanguage">
-                    <option value="ES">Español</option>
-                    <option value="EN">Inglés</option>
-                </select>
+                <div class="form-group">
+                    <label for="role">Rol:</label>
+                    <select id="role" name="role">
+                        <option value="ADMIN">Admin</option>
+                        <option value="USER">User</option>
+                    </select>
+                </div>
 
-                <br>
-                <button type="submit">Guardar</button>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="nativeLanguage">Idioma Nativo:</label>
+                    <select id="nativeLanguage" name="nativeLanguage">
+                        <option value="ES">Español</option>
+                        <option value="EN">Inglés</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Guardar</button>
             </form>
         </dialog>
-    </section>
+    </div>
+
 </div>
 </body>
 </html>
