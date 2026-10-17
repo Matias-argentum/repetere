@@ -8,14 +8,21 @@
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title th:replace="${title}">Repetere</title>
     <link rel="stylesheet" th:href="@{/css/mvp.css}" href="../../static/css/mvp.css">
+    <link rel="stylesheet" th:href="@{/css/customStyles.css}" href="../../static/css/customStyles.css">
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.17.4/dist/cdn.min.js"></script>
 </head>
 <body hx-boost="true" hx-target="#content" hx-swap="innerHTML" hx-push-url="true">
 
 <header>
-    <nav>
-        <h2>Repetere</h2>
-        <ul>
+    <nav x-data="{ isOpen: false }" x-on:click.outside="isOpen = false">
+        <a th:href="@{/dashboard}"><h2>Repetere</h2></a>
+
+        <button class="hamburger-btn" @click="isOpen = !isOpen">
+            ≣
+        </button>
+
+        <ul x-show="isOpen" x-transition.delay.50ms @click="isOpen = false">
             <li sec:authorize="hasRole('ADMIN')"><a th:href="@{/admin/users}">Usuarios</a></li>
             <li><a th:href="@{/profile}">Perfil</a></li>
             <li><a th:href="@{/decks}">Mis Mazos</a></li>
@@ -23,7 +30,7 @@
             <li><a th:href="@{/stats}">Estadísticas</a></li>
             <li>
                 <form th:action="@{/logout}" method="post" hx-boost="false" style="display: inline; margin: 0;">
-                    <button type="submit" style="all: unset; cursor: pointer; color: inherit; font: inherit;">
+                    <button type="submit" class="btn btn-outline">
                         Cerrar Sesión
                     </button>
                 </form>

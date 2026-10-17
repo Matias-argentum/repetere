@@ -2,111 +2,132 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:fragment="page" th:replace="~{layout/main-layout :: layout(~{::content}, ~{::title})}">
-        <title>Profile</title>
+        <title>Mi Perfil - Repetere</title>
     </th:block>
 </head>
 <body>
 <div th:fragment="content">
-    <h3>Mi Perfil</h3>
-    <div th:if="${errorMessage}">
-        <p><code th:text="${errorMessage}"></code></p>
+
+    <div style="max-width: 600px; margin: 0 auto 20px auto;">
+        <h2 style="margin-bottom: 5px;">Mi Perfil</h2>
+        <p style="color: var(--text-muted); margin-top: 0;">Gestiona la información de tu cuenta.</p>
     </div>
+
+    <!-- Mensajes de error o éxito -->
+    <div th:if="${errorMessage}" style="max-width: 600px; margin: 0 auto 15px auto; padding: 10px; background-color: rgba(247, 113, 125, 0.1); border-left: 4px solid var(--danger-color); border-radius: 4px;">
+        <code th:text="${errorMessage}" style="color: var(--danger-color);"></code>
+    </div>
+
     <section th:fragment="users-data-div">
-        <div th:if="${successMessage}">
-            <p><code th:text="${successMessage}"></code></p>
+        <div th:if="${successMessage}" style="max-width: 600px; margin: 0 auto 15px auto; padding: 10px; background-color: rgba(39, 174, 96, 0.1); border-left: 4px solid #27ae60; border-radius: 4px;">
+            <code th:text="${successMessage}" style="color: #27ae60;"></code>
         </div>
-        <aside  id="user-card">
-            <div style="display: flex; justify-content: space-between;">
-                <div style="width: 70%">
-                    <label>Nombre: </label>
+
+        <aside id="user-card" class="profile-card" style="background-color: var(--bg-color);">
+
+            <div class="profile-row">
+                <div class="profile-info">
+                    <label>Nombre</label>
                     <p th:text="${user.name}"></p>
                 </div>
                 <div>
-                    <button popovertarget="dialog-modal-update-name" id="openDialog1" style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2;">Actualizar</button>
+                    <button popovertarget="dialog-modal-update-name" id="openDialog1" class="btn btn-outline">Actualizar</button>
                 </div>
             </div>
-            <div style="display: flex; justify-content: space-around;">
-                <div style="width: 70%">
-                    <label>Email: </label>
+
+            <div class="profile-row">
+                <div class="profile-info">
+                    <label>Email</label>
                     <p th:text="${user.email}"></p>
                 </div>
                 <div>
-                    <button popovertarget="dialog-modal-update-email" id="openDialog2" style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2;">Actualizar</button>
+                    <button popovertarget="dialog-modal-update-email" id="openDialog2" class="btn btn-outline">Actualizar</button>
                 </div>
             </div>
-            <div style="display: flex; justify-content: space-around;">
-                <div style="width: 70%">
-                    <label>Password: </label>
+
+            <div class="profile-row">
+                <div class="profile-info">
+                    <label>Contraseña</label>
                     <p>*********</p>
                 </div>
                 <div>
-                    <button popovertarget="dialog-modal-update-password" id="openDialog3" style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2;">Actualizar</button>
+                    <button popovertarget="dialog-modal-update-password" id="openDialog3" class="btn btn-outline">Actualizar</button>
                 </div>
             </div>
-            <div style="display: flex; justify-content: space-around;">
-                <div style="width: 70%">
-                    <label>Idioma nativo: </label>
+
+            <div class="profile-row">
+                <div class="profile-info">
+                    <label>Idioma nativo</label>
                     <p th:text="${user.nativeLanguage}"></p>
                 </div>
                 <div>
-                    <button disabled style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2;">Actualizar</button>
+                    <button disabled class="btn btn-outline" style="opacity: 0.5; cursor: not-allowed;">Actualizar</button>
                 </div>
-
             </div>
+
         </aside>
     </section>
-    <br>
+
+    <!-- Diálogos modales -->
     <section>
-
         <dialog popover="" id="dialog-modal-update-name">
-            <h3>Actualizar nombre</h3>
-            <hr>
-            <form th:action="@{/profile/update-name}"
-                  method="POST"
-                  hx-confirm="Se actualizara tu nombre de usuario y tendras que volver a iniciar sesión ¿seguro?">
+            <h3 style="margin-top: 0;">Actualizar nombre</h3>
+            <hr style="border-color: var(--border-color); margin-bottom: 15px;">
 
-                <label for="name">Nuevo nombre:</label>
-                <input type="text" id="name" name="name" size="28" placeholder="Nombre" required>
+            <form th:action="@{/profile/update-name}" method="POST" hx-confirm="Se actualizará tu nombre de usuario y tendrás que volver a iniciar sesión. ¿Seguro?">
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="name">Nuevo nombre:</label>
+                    <input type="text" id="name" name="name" placeholder="Nombre" required>
+                </div>
 
-                <label for="password-name">Password:</label>
-                <input type="password" id="password-name" name="passwordName" size="28" placeholder="password" required>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="password-name">Contraseña actual:</label>
+                    <input type="password" id="password-name" name="passwordName" placeholder="Contraseña" required>
+                </div>
 
-                <br>
-                <button type="submit">Actualizar</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Actualizar</button>
             </form>
         </dialog>
+
         <dialog popover="" id="dialog-modal-update-email">
-            <h3>Actualizar email</h3>
-            <form th:action="@{/profile/update-email}"
-                  method="POST"
-                  hx-confirm="Se actualizara tu email y tendras que volver a iniciar sesión ¿seguro?">
-                <label for="email">Nuevo email:</label>
-                <input type="text" id="email" name="email" size="28" placeholder="email" required>
+            <h3 style="margin-top: 0;">Actualizar email</h3>
+            <hr style="border-color: var(--border-color); margin-bottom: 15px;">
 
-                <label for="password-email">Password:</label>
-                <input type="password" id="password-email" name="passwordEmail" size="28" placeholder="password" required>
+            <form th:action="@{/profile/update-email}" method="POST" hx-confirm="Se actualizará tu email y tendrás que volver a iniciar sesión. ¿Seguro?">
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="email">Nuevo email:</label>
+                    <input type="text" id="email" name="email" placeholder="Correo electrónico" required>
+                </div>
 
-                <br>
-                <button type="submit">Actualizar</button>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="password-email">Contraseña actual:</label>
+                    <input type="password" id="password-email" name="passwordEmail" placeholder="Contraseña" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Actualizar</button>
             </form>
         </dialog>
+
         <dialog popover="" id="dialog-modal-update-password">
-            <h3>Actualizar password</h3>
-            <form th:action="@{/profile/update-password}"
-                  method="POST"
-                  hx-confirm="Se actualizara tu password y tendras que volver a iniciar sesión ¿seguro?">
+            <h3 style="margin-top: 0;">Actualizar contraseña</h3>
+            <hr style="border-color: var(--border-color); margin-bottom: 15px;">
 
-                <label for="current-password">Password Actual:</label>
-                <input type="password" id="current-password" name="currentPassword" size="28" placeholder="password" required>
+            <form th:action="@{/profile/update-password}" method="POST" hx-confirm="Se actualizará tu contraseña y tendrás que volver a iniciar sesión. ¿Seguro?">
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label for="current-password">Contraseña actual:</label>
+                    <input type="password" id="current-password" name="currentPassword" placeholder="Contraseña actual" required>
+                </div>
 
-                <label for="new-password">Password Nuevo:</label>
-                <input type="password" id="new-password" name="newPassword" size="28" placeholder="password" required>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <label for="new-password">Nueva contraseña:</label>
+                    <input type="password" id="new-password" name="newPassword" placeholder="Nueva contraseña" required>
+                </div>
 
-                <br>
-                <button type="submit">Actualizar</button>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Actualizar</button>
             </form>
         </dialog>
     </section>
+
 </div>
 </body>
 </html>

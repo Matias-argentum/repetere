@@ -7,50 +7,79 @@
 </head>
 <body>
 <div th:fragment="content">
-    <h3>Generar Prompt</h3>
 
-    <section id="prompt-form-section">
-        <form th:action="@{/prompts/generate}" method="post">
+    <div class="form-card">
+        <h2 style="margin-top: 0; margin-bottom: 20px;">Generar Prompt</h2>
 
-            <label for="targetLanguageId">Idioma que quiero aprender:</label>
-            <select id="targetLanguageId" name="targetLanguageId" required>
-                <option th:each="language : ${languages}"
-                        th:value="${language.id}"
-                        th:text="${language.name}"></option>
-            </select>
+        <section id="prompt-form-section">
+            <form th:action="@{/prompts/generate}" method="post">
 
-            <label for="level">Nivel actual:</label>
-            <select id="level" name="level" required>
-                <option value="A1">A1</option>
-                <option value="A2">A2</option>
-                <option value="B1">B1</option>
-                <option value="B2">B2</option>
-                <option value="C1">C1</option>
-                <option value="C2">C2</option>
-            </select>
+                <div class="form-group">
+                    <label for="targetLanguageId">Idioma que quiero aprender:</label>
+                    <select id="targetLanguageId" name="targetLanguageId" required>
+                        <option th:each="language : ${languages}"
+                                th:value="${language.id}"
+                                th:text="${language.name}"></option>
+                    </select>
+                </div>
 
-            <label for="topic">Tema:</label>
-            <input type="text" id="topic" name="topic" placeholder="Ej: viajes, comida, negocios" required>
+                <div class="form-group">
+                    <label for="level">Nivel actual:</label>
+                    <select id="level" name="level" required>
+                        <option value="A1">A1 - Principiante</option>
+                        <option value="A2">A2 - Básico</option>
+                        <option value="B1">B1 - Intermedio</option>
+                        <option value="B2">B2 - Intermedio Alto</option>
+                        <option value="C1">C1 - Avanzado</option>
+                        <option value="C2">C2 - Dominio eficaz</option>
+                    </select>
+                </div>
 
-            <label for="clarifications">Aclaraciones (opcional):</label>
-            <textarea id="clarifications" name="clarifications" placeholder="Ej: quiero enfocarme en verbos en pasado"></textarea>
+                <div class="form-group">
+                    <label for="topic">Tema:</label>
+                    <input type="text" id="topic" name="topic" placeholder="Ej: viajes, comida, negocios" required>
+                </div>
 
-            <br>
-            <button type="submit">Generar Prompt</button>
-        </form>
-    </section>
+                <div class="form-group">
+                    <label for="clarifications">Aclaraciones (opcional):</label>
+                    <textarea id="clarifications" name="clarifications" rows="3" placeholder="Ej: quiero enfocarme en verbos en pasado"></textarea>
+                </div>
 
-    <br>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">
+                    Generar Prompt
+                </button>
+            </form>
+        </section>
+    </div>
 
-    <section id="prompt-result-section" th:fragment="promptResult">
-        <div th:if="${generatedPrompt}" style="width: 100%">
-            <h4>Tu prompt (Copialo y pegalo en tu IA favorita):</h4>
-            <button type="button"
-                    style="padding: 6px 12px; font-size: 0.9rem; line-height: 1.2;"
-                    onclick="navigator.clipboard.writeText(document.getElementById('promptResultTextarea').value)">
-                Copiar
-            </button>
-            <textarea id="promptResultTextarea" readonly rows="15" style="width: 100%;" th:text="${generatedPrompt}"></textarea>
+    <!-- Sección de resultado -->
+    <section id="prompt-result-section" th:fragment="promptResult" class="form-card" th:if="${generatedPrompt}">
+
+        <div class="instruction-box">
+            <strong>Paso siguiente:</strong> Copia este prompt, pegalo en tu IA favorita (ChatGPT, Claude) para generar las tarjetas y luego andá a <a th:href="@{/decks/new}" style="font-weight: bold;">Crear Mazo</a> para subir el archivo.
+        </div>
+
+        <!-- Manejo de copia a portapapeles con feedback visual usando Alpine.js -->
+        <div x-data="{ copied: false }">
+            <div class="prompt-header-action">
+                <span style="font-weight: 600; font-size: 0.95rem;">Tu Prompt generado: </span>
+
+                <button type="button"
+                        class="btn btn-secondary"
+                        @click="
+                            navigator.clipboard.writeText(document.getElementById('promptResultTextarea').value);
+                            copied = true;
+                            setTimeout(() => copied = false, 2000);
+                        ">
+                    <span x-text="copied ? '¡Prompt Copiado!' : 'Copiar  Prompt'">Copiar Prompt</span>
+                </button>
+            </div>
+
+            <textarea id="promptResultTextarea"
+                      readonly
+                      rows="12"
+                      style="resize: vertical; font-family: monospace; font-size: 0.85rem;"
+                      th:text="${generatedPrompt}"></textarea>
         </div>
     </section>
 
