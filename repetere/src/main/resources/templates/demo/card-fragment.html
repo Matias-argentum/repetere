@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="content" id="content">
+
+    <div th:if="${card}">
+
+        <p style="font-size: 0.95rem; color: var(--text-muted); text-align: center; margin-bottom: 15px;">
+            Esta es la demo, pibe.
+        </p>
+
+        <!-- Contenedor con Alpine -->
+        <div class="study-card-container" x-data="{ showBack: false }">
+
+            <!-- La tarjeta completa reacciona al clic -->
+            <div class="flashcard" @click="showBack = !showBack">
+
+                <!-- ================= FRENTE ================= -->
+                <div class="card-face" x-show="!showBack" x-transition.duration.200ms>
+                    <div>
+                        <div style="text-align: center;">
+                            <span style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-color);">Palabra</span>
+                            <p th:text="${card.wordTarget}" style="font-size: 2.2rem; font-weight: bold; margin: 8px 0;"></p>
+                            <p th:if="${card.phonetic}" th:text="${card.phonetic}" style="color: var(--text-muted); font-style: italic; margin: 0 0 10px 0;"></p>
+                        </div>
+
+                        <!-- @click.stop evita que al reproducir el audio se active el cambio de cara -->
+                        <audio th:if="${card.wordTargetAudioUrl}" controls style="width: 100%; margin-top: 10px; height: 30px;" @click.stop>
+                            <source th:src="${card.wordTargetAudioUrl}" type="audio/mpeg">
+                        </audio>
+                    </div>
+
+                    <hr style="border-color: var(--border-color); margin: 15px 0;">
+
+                    <div>
+                        <div style="text-align: center;">
+                            <span style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; color: var(--primary-color);">Oración</span>
+                            <p th:text="${card.sentenceTarget}" style="font-size: 1.2rem; margin: 8px 0;"></p>
+                        </div>
+
+                        <audio th:if="${card.sentenceTargetAudioUrl}" controls style="width: 100%; margin-top: 10px; height: 30px" @click.stop>
+                            <source th:src="${card.sentenceTargetAudioUrl}" type="audio/mpeg">
+                        </audio>
+                    </div>
+
+                    <p style="font-size: 0.9rem; color: var(--text-muted); text-align: center; margin: 0;">(Toca en cualquier parte para ver la traducción)</p>
+                </div>
+
+                <!-- ================= REVERSO ================= -->
+                <div class="card-face" x-show="showBack" x-transition.duration.200ms style="display: none;">
+                    <div style="text-align: center; margin: auto 0;">
+                        <span style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; color: var(--secondary-color);">Traducción</span>
+                        <p th:text="${card.wordTranslation}" style="font-size: 2.2rem; font-weight: bold; margin: 10px 0;"></p>
+
+                        <hr style="border-color: var(--border-color); margin: 25px auto; width: 40%;">
+
+                        <span style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; color: var(--secondary-color);">Traducción de la oración</span>
+                        <p th:text="${card.sentenceTranslation}" style="font-size: 1.15rem; color: var(--text-color); margin: 10px 0;"></p>
+                    </div>
+
+                    <p style="font-size: 0.9rem; color: var(--text-muted); text-align: center; margin: 0;">(Toca en cualquier parte para volver)</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Botones de puntuación usando GET -->
+        <div style="display: flex; justify-content: center; gap: 10px; margin-top: 20px; max-width: 500px; margin-left: auto; margin-right: auto;">
+
+            <!-- No recuerdo (Rojo pastel) -->
+            <button th:hx-get="@{/demo/rate(step=${nextStep})}"
+                    hx-target="#content" hx-swap="innerHTML"
+                    class="btn" style="flex: 1; background-color: #ff9999; color: #121212; font-weight: 600;">No recuerdo</button>
+
+            <!-- Difícil (Naranja pastel) -->
+            <button th:hx-get="@{/demo/rate(step=${nextStep})}"
+                    hx-target="#content" hx-swap="innerHTML"
+                    class="btn" style="flex: 1; background-color: #ffcc80; color: #121212; font-weight: 600;">Difícil</button>
+
+            <!-- Medio (Amarillo pastel) -->
+            <button th:hx-get="@{/demo/rate(step=${nextStep})}"
+                    hx-target="#content" hx-swap="innerHTML"
+                    class="btn" style="flex: 1; background-color: #fff176; color: #121212; font-weight: 600;">Medio</button>
+
+            <!-- Fácil (Verde pastel) -->
+            <button th:hx-get="@{/demo/rate(step=${nextStep})}"
+                    hx-target="#content" hx-swap="innerHTML"
+                    class="btn" style="flex: 1; background-color: #a5d6a7; color: #121212; font-weight: 600;">Fácil</button>
+
+        </div>
+
+    </div>
+
+    <div th:unless="${card}" style="text-align: center; padding: 40px;">
+        <h3>¡Demo terminada!</h3>
+        <p style="color: var(--text-muted);">Has probado las 3 tarjetas de muestra.</p>
+        <a th:href="@{/}" class="btn btn-outline" style="margin-top: 15px;">Volver al Inicio</a>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo - Repetere</title>
+    <link rel="stylesheet" th:href="@{/css/mvp.css}" href="../../static/css/mvp.css">
+    <link rel="stylesheet" th:href="@{/css/customStyles.css}" href="../../static/css/customStyles.css">
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+
+<div style="max-width: 600px; margin: 30px auto; padding: 0 15px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 style="margin: 0;">Modo Demo</h2>
+        <a th:href="@{/}" class="btn btn-outline" style="text-decoration: none;">Volver al Inicio</a>
+    </div>
+
+    <!-- Se inserta el fragmento de la tarjeta -->
+    <div th:replace="~{demo/card-fragment :: content}"></div>
+</div>
+
+</body>
+</html>
