@@ -58,7 +58,7 @@ public class Card {
     private LocalDateTime nextReviewAt;
 
     @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
 
     // en Card
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -4,6 +4,7 @@ import com.mat.repetere.dto.deck.DeckRequestDto;
 import com.mat.repetere.dto.deck.DeckResponseDto;
 import com.mat.repetere.dto.deck.ParsedCsvLineDto;
 import com.mat.repetere.exception.LanguageNotFoundException;
+import com.mat.repetere.exception.MaxDecksReachedException;
 import com.mat.repetere.exception.UserNotFoundException;
 import com.mat.repetere.model.Deck;
 import com.mat.repetere.model.DeckStatus;
@@ -14,8 +15,10 @@ import com.mat.repetere.repository.DeckRepository;
 import com.mat.repetere.repository.LanguageRepository;
 import com.mat.repetere.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,29 +29,37 @@ public class DeckCreator {
     private final LanguageRepository languageRepository;
     private final CardRepository cardRepository;
     private final DeckRepository deckRepository;
+    private final Clock clock;
+    @Value("${app.decks.max-per-user}")
+    private int MAXDECKS;
 
-    public DeckCreator(UserRepository userRepository, LanguageRepository languageRepository, CardRepository cardRepository, DeckRepository deckRepository) {
+    public DeckCreator(UserRepository userRepository, LanguageRepository languageRepository, CardRepository cardRepository, DeckRepository deckRepository, Clock clock) {
         this.userRepository = userRepository;
         this.languageRepository = languageRepository;
         this.cardRepository = cardRepository;
         this.deckRepository = deckRepository;
+        this.clock = clock;
     }
 
     @Transactional
     public DeckResponseDto create(DeckRequestDto request, List<ParsedCsvLineDto> parsedRows, Long ownerId){
         User user = userRepository.findById(ownerId).orElseThrow(()->new UserNotFoundException(ownerId));
+
+        if(deckRepository.countByUserId(user.getId()) >= MAXDECKS){
+            throw new MaxDecksReachedException("Cannot have more active decks");
+        }
         //System.out.println("TARGETLANGIAGECODE: " + request.targetLanguageCode());
         Language targetLanguage = languageRepository.findById(request.targetLanguageId()).orElseThrow(()-> new LanguageNotFoundException("language not found"));
 
         Deck deck = new Deck();
         deck.setDeckStatus(DeckStatus.PROCESSING);
-        deck.setCreatedAt(LocalDateTime.now());
+        deck.setCreatedAt(LocalDateTime.now(clock));
         deck.setUser(user);
         deck.setName(request.deckName());
         deck.setLangTo(targetLanguage);
 
         Deck savedDeck = deckRepository.save(deck);
-        cardRepository.saveAll(parsedRows.stream().map( line -> ParsedCsvLineDto.fromDtoToCardEntity(line, savedDeck)).toList());
+        cardRepository.saveAll(parsedRows.stream().map( line -> ParsedCsvLineDto.fromDtoToCardEntity(line, savedDeck, LocalDateTime.now(clock))).toList());
 
         return new DeckResponseDto(
                 savedDeck.getId(),

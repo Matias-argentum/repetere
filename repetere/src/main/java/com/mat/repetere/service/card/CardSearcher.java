@@ -9,6 +9,7 @@ import com.mat.repetere.repository.CardRepository;
 import com.mat.repetere.service.file.FileService;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -17,10 +18,12 @@ import java.util.Optional;
 public class CardSearcher {
     private final CardRepository repository;
     private final FileService fileService;
+    private final Clock clock;
 
-    public CardSearcher(CardRepository repository, FileService fileService) {
+    public CardSearcher(CardRepository repository, FileService fileService, Clock clock) {
         this.repository = repository;
         this.fileService = fileService;
+        this.clock = clock;
     }
 
     public List<CardResponseDto> findAllByDeckId(Long deckId){
@@ -36,7 +39,7 @@ public class CardSearcher {
     }
 
     public Optional<StudyCardDto> findNextDueCard(Long deckId){
-        List<Card> dueCards = repository.findDueCards(deckId, CardState.NEW, LocalDateTime.now());
+        List<Card> dueCards = repository.findDueCards(deckId, CardState.NEW, LocalDateTime.now(clock));
         if (dueCards.isEmpty()){
             return Optional.empty();
         }

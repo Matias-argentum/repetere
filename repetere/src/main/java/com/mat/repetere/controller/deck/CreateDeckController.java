@@ -4,6 +4,7 @@ import com.mat.repetere.dto.deck.DeckRequestDto;
 import com.mat.repetere.dto.deck.DeckResponseDto;
 import com.mat.repetere.dto.deck.ParsedCsvLineDto;
 import com.mat.repetere.exception.MalformattedCsvFileException;
+import com.mat.repetere.exception.MaxDecksReachedException;
 import com.mat.repetere.security.CustomUserDetails;
 import com.mat.repetere.service.deck.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -48,6 +49,9 @@ public class CreateDeckController {
             return "decks/deck-list :: content";
         } catch (MalformattedCsvFileException | IOException e) {
             model.addAttribute("errorMessage", "Error en el archivo: " + e.getMessage());
+            return "decks/new :: content";
+        } catch (MaxDecksReachedException e) {
+            model.addAttribute("errorMessage", "No puede tener más de 10 mazos activos");
             return "decks/new :: content";
         }
     }

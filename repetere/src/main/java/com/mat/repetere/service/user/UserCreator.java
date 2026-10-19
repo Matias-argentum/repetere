@@ -8,6 +8,7 @@ import com.mat.repetere.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -15,11 +16,13 @@ import java.time.LocalDateTime;
 public class UserCreator {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
+    private final Clock clock;
 
 
-    public UserCreator(UserRepository repository, PasswordEncoder passwordEncoder) {
+    public UserCreator(UserRepository repository, PasswordEncoder passwordEncoder, Clock clock) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
+        this.clock = clock;
     }
 
     public UserResponseDto create(UserRequestDto request){
@@ -32,12 +35,12 @@ public class UserCreator {
         User user = new User();
         user.setName(username);
         user.setEmail(request.email());
-        user.setCreatedAt(LocalDateTime.now());
+        user.setCreatedAt(LocalDateTime.now(clock));
         user.setActive(true);
         user.setForcePasswordChange(true);
         user.setNativeLanguage(request.nativeLanguage());
         user.setRole(request.role());
-        user.setPassword(passwordEncoder.encode(LocalDate.now().getDayOfMonth() + "-" + request.name()));
+        user.setPassword(passwordEncoder.encode(LocalDate.now(clock).getDayOfMonth() + "-" + request.name()));
 
         return UserResponseDto.fromEntity(repository.save(user));
     }

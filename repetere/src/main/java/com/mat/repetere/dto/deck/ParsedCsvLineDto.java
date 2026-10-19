@@ -13,11 +13,11 @@ public record ParsedCsvLineDto(
         String sentenceTarget,
         String sentenceTranslation
 ) {
-    public static Card fromDtoToCardEntity(ParsedCsvLineDto line, Deck deck){
+    public static Card fromDtoToCardEntity(ParsedCsvLineDto line, Deck deck, LocalDateTime now){
         Card card = new Card();
         card.setDeck(deck);
         card.setCardState(CardState.NEW);
-        card.setCreatedAt(LocalDateTime.now());
+        card.setCreatedAt(now);
         card.setPhonetic(line.phonetic);
         card.setWordTarget(line.wordTarget);
         card.setWordTranslation(line.wordTranslation);

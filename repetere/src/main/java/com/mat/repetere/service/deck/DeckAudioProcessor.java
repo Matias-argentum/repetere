@@ -16,6 +16,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -68,7 +69,7 @@ public class DeckAudioProcessor {
                     .retrieve()
                     .body(TtsGenerationResponseDto.class);
 
-            if (response != null) {
+            if (response != null && cardList.size() == response.cards().size()) {
                 List<TtsCardGenerationResponseDto> cardsInResponse = response.cards();
                 cardsInResponse.sort(Comparator.comparing(TtsCardGenerationResponseDto::id));
 
@@ -83,12 +84,16 @@ public class DeckAudioProcessor {
 
             }else{
                 deck.setDeckStatus(DeckStatus.FAILED);
-                deckRepository.save(deck);
             }
         } catch (HttpClientErrorException e) {
             deck.setDeckStatus(DeckStatus.FAILED);
-            deckRepository.save(deck);
             System.out.println(e.getResponseBodyAsString());
+        } catch( Exception e){
+            deck.setDeckStatus(DeckStatus.FAILED);
+            System.out.println(e.getMessage());
+        }
+        finally {
+            deckRepository.save(deck);
         }
     }
 
