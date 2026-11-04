@@ -217,7 +217,7 @@ La app queda en <http://localhost:8080>.
 
 Revisá en la consola de MinIO que exista el bucket `repetere-audios`; si no, crealo.
 
-**Usuario inicial:** `[completar: cómo se crea el primer administrador]`
+**Usuario inicial:** `[Se crea en el data initizalizer: admin@repetere.com]`
 
 ### Configuración
 
