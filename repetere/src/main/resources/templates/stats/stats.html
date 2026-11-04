@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:fragment="page" th:replace="~{layout/main-layout :: layout(~{::content}, ~{::title})}">
+        <title>Dashboard - Repetere</title>
+    </th:block>
+</head>
+<body>
+<div th:fragment="content">
+
+    <div style="max-width: 900px; margin: 0 auto 10px auto;">
+        <h3>Estadisticas</h3>
+    </div>
+
+    <section class="stats-cards-container">
+        <aside class="stats-card">
+            <h3>Revisadas hoy</h3>
+            <p th:text="${stats.reviewsToday}">chan</p>
+        </aside>
+
+        <aside class="stats-card">
+            <h3>Por revisar hoy</h3>
+            <p th:text="${stats.dueCardsCount}">chan</p>
+        </aside>
+
+        <aside class="stats-card" th:each="entry : ${stats.cardsByState}">
+                <h3 th:text="${entry.key}">NEW</h3>
+                <p th:text="${entry.value}">53</p>
+        </aside>
+
+        <aside class="stats-card">
+            <h3>Porcentaje de retención: </h3>
+            <p th:text="${stats.retentionRate}">chan</p>
+        </aside>
+    </section>
+
+</div>
+</body>
+</html>
