@@ -292,3 +292,13 @@ Las propiedades principales están en `repetere/src/main/resources/application.p
 - [ ] Tests (empezando por SM-2 y el parser de CSV)
 - [ ] Migraciones de base de datos
 - [ ] Contraseñas iniciales aleatorias
+
+## Capturas de pantalla
+
+![Pantalla de estudio](docs/img/study-screen.png)
+![Pantalla de estudio reverso de la tarjeta](docs/img/study-screen2.png)
+![Lista de mazos](docs/img/decks-view.png)
+![Dashboard principal](docs/img/dashboard.png)
+![Pantalla Crear deck](docs/img/create-deck.png)
+![Pantalla generar prompt](docs/img/generate-prompt.png)
+
